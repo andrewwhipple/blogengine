@@ -43,7 +43,7 @@ app.set('view engine', 'meow');
     Moral of the story: replace "." with the path to the '/blog/' folder, following the data-based 
     sub-directory conventions laid out (eventually) in the README.
 */
-var filePath = "~/Dropbox/BlogPosts";
+var filePath = "../Dropbox/BlogPosts";
 
 //Handle the static files
 app.use('/css', express.static(__dirname + '/css'));
