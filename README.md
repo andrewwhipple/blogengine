@@ -16,14 +16,12 @@ A repo for a home-built blog engine, mostly just to experiment and get better at
 
 ### To do
 
-* Literally 100% of the styling. It looks like garbage.
 * Theme handling?
 * Metadata
 * Tags
 * Search?
-* Archive page
 * ideally some sort of caching so it doesnt have to do a file read every goddamn time, and 5+ times whenever the index is hit. 
-* Some sort of automaticity to the post updating, so it doesn't 
+* Some sort of automaticity to the post updating, since it's a bit of a chore to add a new post.
 * Footnotes, probably.
 
 ### Post Formatting:
