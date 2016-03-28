@@ -55,7 +55,7 @@ app.use('/static', express.static(__dirname + '/static'));
 app.get('/', function(req, res) {
     fs.readFile(filePath + '/blog/postList.json', function(err, content) {
         if (err) {
-            return callback(new Error(err));
+            return new Error(err);
         } 
         var postList = JSON.parse(content);
         //Ordering is by date, most recent first, and reverse alphabetical if multiple on one day.
