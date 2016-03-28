@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="{{meta-description}}">
+        <meta name="keywords" content="{{meta-keywords}}">
+        <meta name="author" content="{{meta-author}}">
+        <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/css/theme.css" rel="stylesheet" type="text/css" />
+        <script src="/scripts/bootstrap.min.js"></script>
+        <title>{{title}}</title>
+    </head>
+
+    <body>
+        <div class="mw-body container">
+        
+            <div class="mw-header">
+                <div class="mw-header-content">
+                    
+                    <h1 class="mw-header-title"><a class="mw-header-title-no-highlight" href="/">Andrew Whipple</a></h1>
+                    <p class="mw-header-description">He <a href="/writing">writes</a> things, <a href="/podcast">says</a> things, <a href="/education">learns</a> things, and <a href="/stuff">makes</a> things.</p>
+            
+            
+                    <div class="mw-navbar">
+                        <h4><a href="/about">About</a> - <a href="/podcast">Podcast</a> - <a href="/archive">Archive</a> - <a href="/elsewhere">Elsewhere</a></h4>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mw-body-content">
+                {{body}}
+            </div>
+            
+            <div class="mw-footer">
+                <p class="mw-footer-text">© Andrew Whipple 2016</p>
+            </div>
+        
+        </div>
+        
+    </body>
+
+</html>

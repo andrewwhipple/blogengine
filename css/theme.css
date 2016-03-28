@@ -1,0 +1,113 @@
+
+
+a, a:visited, a:active {
+    color: #36ABD9;
+}
+
+a:hover {
+    color: #023859;
+}
+
+
+body {
+    background-color: #F2F2F2;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3%;
+    margin-top: 3%;
+    max-width: 40em;
+}
+
+.mw-header {
+    background-color: #023859;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 768px) {
+    .mw-header {
+        margin-left: -15%;
+        margin-right: -15%;
+    }
+}
+
+@media (min-width: 1500px) {
+    .mw-header {
+        margin-left: -50%;
+        margin-right: -50%;
+    }
+}
+
+.mw-header-content {
+    display: block;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    max-width: 55em;
+    margin-left: auto;
+    margin-right: auto;
+    color: #F2F2F2;
+}
+
+.mw-header-content a:hover {
+    color: #F2F2F2;
+}
+
+.mw-navbar a {
+    color: #F2F2F2;
+}
+
+a.mw-header-title-no-highlight {
+    color: #F2F2F2;
+}
+
+.mw-body {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+.mw-post-title a {
+    text-decoration: none;
+    color: #023859;
+}
+
+.mw-post-title a:hover, .mw-post-title a:visited {
+    color: #023859;
+}
+
+
+.mw-linkpost-pub-date, .mw-post-pub-date {
+    color: gray;
+}
+
+
+
+.mw-post, .mw-linkpost, .mw-page {
+    border-bottom: 1px solid gray;
+    padding-bottom: 2%;
+    padding-left: 3%;
+    padding-right: 3%;
+    max-width: 50em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mw-footer-text {
+    color: gray;
+    text-align: center;
+}
+
+.mw-footer {
+    padding-top: 2%;
+}
+
+
+
+
+

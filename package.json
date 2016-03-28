@@ -1,0 +1,12 @@
+{
+  "name": "blogEngine",
+  "version": "1.0.0",
+  "description": "Learning to build a blog engine!",
+  "main": "engine.js",
+  "author": "Andrew Whipple",
+  "dependencies": {
+    "express": "^4.13.4",
+    "marked": "^0.3.5",
+    "serve-favicon": "^2.3.0"
+  }
+}
