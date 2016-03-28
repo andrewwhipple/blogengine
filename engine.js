@@ -49,7 +49,7 @@ var filePath = "../Dropbox/BlogPosts";
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
-app.use('/static', express.static(__dirname + '/static'));
+app.use('/static', express.static(filePath + '/static'));
 
 //Route handler for the homepage, responsible for creating the blogroll
 app.get('/', function(req, res) {
