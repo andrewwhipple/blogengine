@@ -8,6 +8,8 @@ sudo apt-get install -y nodejs
 
 sudo apt-get install -y build-essential
 
+sudo npm install -g nodemon
+
 git clone https://github.com/andrewwhipple/blogengine.git
 
 cd blogengine
