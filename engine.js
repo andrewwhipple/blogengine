@@ -15,7 +15,7 @@ var meta = {
     "meta-author": "Andrew Whipple"
 }
 
-app.use(favicon(__dirname + '/static/favicon.ico'));
+app.use(favicon(__dirname + '/favicon.ico'));
 
 //The meow templating engine. It's silly. It's unnecessary. But eh, why not?
 app.engine('meow', function(filePath, options, callback) {

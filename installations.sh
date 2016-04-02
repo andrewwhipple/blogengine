@@ -1,5 +1,7 @@
 clear
 
+apt-get update
+
 sudo apt-get install git
 
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
