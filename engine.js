@@ -8,6 +8,9 @@ var favicon = require('serve-favicon');
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
 var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
 
+var productionPort = 80;
+var developmentPort = 2888;
+
 //Meta-tag information
 var meta = {
     "meta-description": "Andrew Whipple's website",
@@ -203,7 +206,7 @@ var processPost = function(postData) {
 }
 
 //The server!
-app.listen(process.env.PORT || 2888, function() {
+app.listen(productionPort || developmentPort || 3000, function() {
     console.log('Listening on port ' + process.env.PORT);
 });
 
