@@ -207,6 +207,7 @@ var processPost = function(postData) {
 
 //The server!
 app.listen(productionPort || developmentPort || 3000, function() {
-    console.log('Listening on port ' + this.address().port);
+    var placeHolder = "this string";
+    //console.log('Listening on port ' + this.address().port);
 });
 
