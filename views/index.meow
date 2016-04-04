@@ -15,8 +15,8 @@
     <body>
         <div class="mw-body container">
             
-            <div class="mw-header row">
-                <div class="mw-header-content col-md-12 col-sm-12">
+            <div class="mw-header ">
+                <div class="mw-header-content">
                     
                     <h1 class="mw-header-title"><a class="mw-header-title-no-highlight" href="/">Andrew Whipple</a></h1>
                     <p class="mw-header-description">He <a href="/writing">writes</a> things, <a href="/podcast">says</a> things, <a href="/education">learns</a> things, and <a href="/stuff">makes</a> things.</p>
@@ -27,13 +27,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="mw-body-content col-md-12 col-sm-12">
+            <div>
+                <div class="mw-body-content">
                     {{body}}
                 </div>
             </div>
-            <div class="row">
-                <div class="mw-footer col-md-12 col-sm-12">
+            <div>
+                <div class="mw-footer">
                     <p class="mw-footer-text">© Andrew Whipple 2016</p>
                 </div>
             </div>
