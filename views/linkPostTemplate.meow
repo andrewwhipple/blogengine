@@ -1,7 +1,7 @@
 <div class="mw-linkpost"> 
-    <h1 class="mw-linkpost-title"><a href="{{link}}">{{title}} -></a></h1>
+    <h1 class="mw-linkpost-title"><a href="{{link}}">{{title}} 🔗</a></h1>
     <span>
-        <p class="mw-linkpost-pub-date"><em>Published {{date}}</em> <a href="{{permalink}}" class="mw-linkpost-permalink">(Permalink)</a></p>
+        <p class="mw-linkpost-pub-date"><em>Published {{date}}</em> <a href="{{permalink}}" class="mw-linkpost-permalink">(Permalink 📌)</a></p>
     </span>
     <div class="mw-linkpost-content">
         {{content}}

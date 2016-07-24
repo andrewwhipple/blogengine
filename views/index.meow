@@ -32,9 +32,24 @@
                 <div class="mw-body-content">
                     {{body}}
                 </div>
+                <div class="mw-more-posts">
+                    <a href="/archive"><h5>More posts</h5></a>
+                </div>
             </div>
             <div>
                 <div class="mw-footer">
+                    <div class="mw-footer-ad">
+                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Homepage Footer -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9513164240234984"
+     data-ad-slot="3907764153"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
                     <p class="mw-footer-text">© Andrew Whipple 2016</p>
                 </div>
             </div>

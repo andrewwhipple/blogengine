@@ -5,9 +5,11 @@ var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
 
+//Loading the templates into memory.
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
 var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
 
+//Ports for the server
 var productionPort = 80;
 var developmentPort = 2888;
 
@@ -18,6 +20,7 @@ var meta = {
     "meta-author": "Andrew Whipple"
 }
 
+//Favicon loading
 app.use(favicon(__dirname + '/favicon.ico'));
 
 //The meow templating engine. It's silly. It's unnecessary. But eh, why not?
@@ -207,7 +210,8 @@ var processPost = function(postData) {
 
 //The server!
 app.listen(productionPort || developmentPort || 3000, function() {
-    var placeHolder = "this string";
+    var placeHolder = "this string in order to make it a function that actually does something";
+    placeHolder = "Because a console.log call makes running the process in the background and disconnecting from the VPS not work."
     //console.log('Listening on port ' + this.address().port);
 });
 

@@ -22,5 +22,5 @@ cd ~
 
 wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 
-current dropbox pid: 8028
-current node pid 26722
+current dropbox pid: 1162
+current node pid 1238
