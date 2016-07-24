@@ -31,8 +31,8 @@
             <div>
                 <div class="mw-body-content">
                     {{body}}
-                    <div class="mw-more-posts">
-                        <a href="/archive"><h4>More posts</h5></a>
+                    <div class="mw-post">
+                        <a href="/archive"><h4>(More posts ➡)</h5></a>
                     </div>
                 </div>
                 
