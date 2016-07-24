@@ -86,6 +86,7 @@ app.get('/', function(req, res) {
                 blogRollHTML += "<br>";
             }
         }
+        blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
         res.render('index', {body: blogRollHTML, title: "Andrew Whipple"});
     });
     
