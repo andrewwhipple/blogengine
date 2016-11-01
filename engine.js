@@ -11,7 +11,6 @@ var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString
 
 //Ports for the server
 var productionPort = 80;
-var developmentPort = 2888;
 
 //Meta-tag information
 var meta = {
@@ -49,8 +48,11 @@ app.set('view engine', 'meow');
     Moral of the story: replace "." with the path to the '/blog/' folder, following the data-based 
     sub-directory conventions laid out (eventually) in the README.
 */
+
+/*Vagrant file path*/
 var filePath = "../home/vagrant/Dropbox/BlogPosts";
 
+//Production filepath, comment this out to run in dev mode!
 filePath = "../Dropbox/BlogPosts";
 
 //Handle the static files
@@ -212,7 +214,7 @@ var processPost = function(postData) {
 }
 
 //The server!
-app.listen(productionPort || developmentPort || 3000, function() {
+app.listen(productionPort || 3000, function() {
     var placeHolder = "this string in order to make it a function that actually does something";
     placeHolder = "Because a console.log call makes running the process in the background and disconnecting from the VPS not work."
     //console.log('Listening on port ' + this.address().port);
