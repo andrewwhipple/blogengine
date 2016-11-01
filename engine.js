@@ -51,6 +51,8 @@ app.set('view engine', 'meow');
 */
 var filePath = "../home/vagrant/Dropbox/BlogPosts";
 
+filePath = "../Dropbox/Blogposts";
+
 //Handle the static files
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
