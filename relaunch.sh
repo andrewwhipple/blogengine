@@ -1,3 +1,3 @@
 PROCESSID=$1
-kill PROCESSID
+kill $PROCESSID
 node engine.js &
