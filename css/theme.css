@@ -24,6 +24,8 @@ img {
     margin-right: auto;
     margin-bottom: 3%;
     margin-top: 3%;
+    width: auto;
+    height: auto;
     max-width: 40em;
 }
 
