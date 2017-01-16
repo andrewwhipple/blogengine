@@ -98,6 +98,39 @@ app.get('/', function(req, res) {
 });
 
 
+app.get('/blogroll', function(req, res) {
+    fs.readFile(filePath + '/blog/postList.json', function(err, content) {
+        if (err) {
+            console.log(err);
+            return;
+        } 
+        var postList = JSON.parse(content);
+        //Ordering is by date, most recent first, and reverse alphabetical if multiple on one day.
+        postList.posts.sort();
+        postList.posts.reverse();
+        var numPosts = postList.posts.length;
+        var blogRollHTML = "";
+        var blogRollPosts = [numPosts];
+        for (var i = 0; i < numPosts; i++) {
+            blogRollPosts[i] = fs.readFileSync(filePath + '/blog/' + postList.posts[i]);
+        }
+        
+        //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
+        for (var j = 0; j < numPosts; j++) {
+            if (blogRollPosts[j]) {
+                
+                blogRollHTML += processPost(blogRollPosts[j]).html;
+                blogRollHTML += "<br>";
+            }
+        }
+        blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+        res.render('index', {body: blogRollHTML, title: "Andrew Whipple"});
+    });
+    
+    
+});
+
+
 //Route handler for individual blog post permalinks
 app.get('/blog/:year/:month/:day/:post/', function(req, res) {
     var path = "" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/";
