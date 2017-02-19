@@ -25,7 +25,7 @@ var meta = {
 //Certificate stuff
 var privateKey = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/privkey.pem');
 var certificate = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/fullchain.pem');
-var credentials = {key: privateKey, cert: certificate};
+var httpsOptions = {key: privateKey, cert: certificate, secureProtocol: 'SSLv3_method'};
 
 
 //Favicon loading
@@ -259,7 +259,7 @@ var processPost = function(postData) {
 }
 
 http.createServer(app).listen(80);
-https.createServer(credentials, app).listen(443, function() {
+https.createServer(httpsOptions, app).listen(443, function() {
     console.log("Hey port 443!");
 });
 
