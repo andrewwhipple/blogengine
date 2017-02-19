@@ -261,7 +261,7 @@ var processPost = function(postData) {
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-//httpServer.listen(productionPort);
+httpServer.listen(productionPort);
 httpsServer.listen(443);
 
 //The server!
