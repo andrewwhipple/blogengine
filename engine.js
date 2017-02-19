@@ -13,7 +13,7 @@ var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString
 
 //Ports for the server
 var productionPort = 80;
-var httpsProductionPort = 443;
+var httpsProductionPort = 8443;
 
 //Meta-tag information
 var meta = {
