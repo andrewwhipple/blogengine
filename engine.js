@@ -258,11 +258,10 @@ var processPost = function(postData) {
     return {"html": postBodyHTML, "title": metaDataParsed.Title};
 }
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+http.createServer(app).listen(80);
+https.createServer(credentials, app).listen(443);
 
-httpServer.listen(productionPort);
-httpsServer.listen(443);
+
 
 //The server!
 /*app.listen(productionPort || 3000, function() {
