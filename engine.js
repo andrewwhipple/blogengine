@@ -25,7 +25,7 @@ var meta = {
 //Certificate stuff
 var privateKey = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/privkey.pem');
 var certificate = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/fullchain.pem');
-var httpsOptions = {key: privateKey, cert: certificate, secureProtocol: 'SSLv3_method'};
+var httpsOptions = {key: privateKey, cert: certificate, secureProtocol: 'TLSv1_2_method'};
 
 
 //Favicon loading
