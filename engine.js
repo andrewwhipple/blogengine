@@ -4,6 +4,8 @@ var app = express();
 var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
+var http = require('http');
+var https = require('https');
 
 //Loading the templates into memory.
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
@@ -11,6 +13,7 @@ var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString
 
 //Ports for the server
 var productionPort = 80;
+var httpsProductionPort = 443;
 
 //Meta-tag information
 var meta = {
@@ -18,6 +21,12 @@ var meta = {
     "meta-keywords": "andrew, whipple, podcast, writing, tech, blog",
     "meta-author": "Andrew Whipple"
 }
+
+//Certificate stuff
+var privateKey = fs.readFileSync('~/../etc/letsencrypt/live/andrewwhipple.com/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('~/../etc/letsencrypt/live/andrewwhipple.com/cert.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
 
 //Favicon loading
 app.use(favicon(__dirname + '/favicon.ico'));
@@ -249,10 +258,16 @@ var processPost = function(postData) {
     return {"html": postBodyHTML, "title": metaDataParsed.Title};
 }
 
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(productionPort);
+httpsServer.listen(httpsProductionPort);
+
 //The server!
-app.listen(productionPort || 3000, function() {
+/*app.listen(productionPort || 3000, function() {
     var placeHolder = "this string in order to make it a function that actually does something";
     placeHolder = "Because a console.log call makes running the process in the background and disconnecting from the VPS not work."
     //console.log('Listening on port ' + this.address().port);
-});
+});  */
 
