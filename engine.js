@@ -262,7 +262,7 @@ var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
 httpServer.listen(productionPort);
-httpsServer.listen(httpsProductionPort);
+httpsServer.listen(443);
 
 //The server!
 /*app.listen(productionPort || 3000, function() {
