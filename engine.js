@@ -201,6 +201,8 @@ app.get('/:page', function(req, res) {
     })
 });
 
+app.use(express.static(filePath + '/static'));
+
 //If all else fails! Must be last get handler. A generic 404-er
 app.get('/*', function(req, res) {
    res.redirect('/404');
