@@ -24,7 +24,7 @@ var meta = {
 
 //Certificate stuff
 var privateKey = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/privkey.pem');
-var certificate = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/cert.pem');
+var certificate = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/fullchain.pem');
 var credentials = {key: privateKey, cert: certificate};
 
 
