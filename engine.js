@@ -5,7 +5,6 @@ var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
 var http = require('http');
-var https = require('https');
 
 //Loading the templates into memory.
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
@@ -21,7 +20,11 @@ var meta = {
     "meta-author": "Andrew Whipple"
 }
 
-
+var globals = {
+    "description": null,
+    "navbar": null,
+    "lastPulled": null
+}
 
 //Favicon loading
 app.use(favicon(__dirname + '/favicon.ico'));
@@ -33,7 +36,7 @@ app.engine('meow', function(filePath, options, callback) {
             return callback(new Error(err));
         }
         var rendered = "";
-        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", meta["meta-description"]).replace("{{meta-keywords}}", meta["meta-keywords"]).replace("{{meta-author}}", meta["meta-author"]);
+        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", meta["meta-description"]).replace("{{meta-keywords}}", meta["meta-keywords"]).replace("{{meta-author}}", meta["meta-author"]).replace("{{description}}", globals.description).replace("{{navbar}}", globals.navbar);
         
         return callback(null, rendered);
     });
@@ -58,6 +61,16 @@ var filePath = "../home/vagrant/Dropbox/BlogPosts";
 
 //Production filepath, comment this out to run in dev mode!
 filePath = "../Dropbox/BlogPosts";
+
+function loadConfigs() {
+    var description = fs.readFileSync(filePath + '/config/description.md'); 
+    var navbar = fs.readFileSync(filtePath + '/config/navbar.md');
+    globals.description = marked(description);
+    globals.navbar = marked(navbar);
+    globals.lastPulled = Date.now();
+}
+
+loadConfigs();
 
 //Handle the static files
 app.use(express.static(filePath + '/static'));
