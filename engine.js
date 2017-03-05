@@ -12,8 +12,7 @@ var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
 var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
 
 //Ports for the server
-var productionPort = 80;
-var httpsProductionPort = 8443;
+var port = 80;
 
 //Meta-tag information
 var meta = {
@@ -22,10 +21,6 @@ var meta = {
     "meta-author": "Andrew Whipple"
 }
 
-//Certificate stuff
-var privateKey = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/privkey.pem');
-var certificate = fs.readFileSync('../../etc/letsencrypt/live/andrewwhipple.com/fullchain.pem');
-var httpsOptions = {key: privateKey, cert: certificate, secureProtocol: 'TLSv1_2_method'};
 
 
 //Favicon loading
@@ -107,7 +102,7 @@ app.get('/', function(req, res) {
     
 });
 
-
+//Route handler for the full, infinite scroll blogroll.
 app.get('/blogroll', function(req, res) {
     fs.readFile(filePath + '/blog/postList.json', function(err, content) {
         if (err) {
@@ -258,10 +253,8 @@ var processPost = function(postData) {
     return {"html": postBodyHTML, "title": metaDataParsed.Title};
 }
 
-http.createServer(app).listen(80);
-https.createServer(httpsOptions, app).listen(443, function() {
-    console.log("Hey port 443!");
-});
+http.createServer(app).listen(port);
+
 
 
 
