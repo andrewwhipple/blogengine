@@ -81,6 +81,11 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 
 //Route handler for the homepage, responsible for creating the blogroll
 app.get('/', function(req, res) {
+    
+    if (Date.now() - globals.lastPulled > 120000) {
+        loadConfigs();
+    }
+    
     fs.readFile(filePath + '/blog/postList.json', function(err, content) {
         if (err) {
             console.log(err);
