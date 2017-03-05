@@ -65,8 +65,8 @@ filePath = "../Dropbox/BlogPosts";
 function loadConfigs() {
     var description = fs.readFileSync(filePath + '/config/description.md'); 
     var navbar = fs.readFileSync(filePath + '/config/navbar.md');
-    globals.description = marked(description);
-    globals.navbar = marked(navbar);
+    globals.description = marked(description.toString());
+    globals.navbar = marked(navbar.toString());
     globals.lastPulled = Date.now();
 }
 
