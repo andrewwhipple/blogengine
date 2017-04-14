@@ -23,6 +23,9 @@ var meta = {
 var globals = {
     "description": null,
     "navbar": null,
+    "meta-description": "Andrew Whipple's website",
+    "meta-keywords": "andrew, whipple, podcast, writing, tech, blog",
+    "meta-author": "Andrew Whipple",
     "lastPulled": null
 }
 
@@ -36,7 +39,7 @@ app.engine('meow', function(filePath, options, callback) {
             return callback(new Error(err));
         }
         var rendered = "";
-        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", meta["meta-description"]).replace("{{meta-keywords}}", meta["meta-keywords"]).replace("{{meta-author}}", meta["meta-author"]).replace("{{description}}", globals.description).replace("{{navbar}}", globals.navbar);
+        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globals.meta-description).replace("{{meta-keywords}}", globals.meta-keywords).replace("{{meta-author}}", globals.meta-author).replace("{{description}}", globals.description).replace("{{navbar}}", globals.navbar);
         
         return callback(null, rendered);
     });
