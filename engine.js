@@ -58,6 +58,9 @@ function loadConfigs() {
     
     var description = fs.readFileSync(globalVars.appConfig.filePath + '/config/description.md'); 
     var navbar = fs.readFileSync(globalVars.appConfig.filePath + '/config/navbar.md');
+    var appConfigString = fs.readFileSync(globalVars.appConfig.filePath + '/config/app-config.json').toString();
+    var appConfig = JSON.parse(appConfigString);
+    console.log(appConfig);
     var appConfig = JSON.parse(fs.readFileSync(globalVars.appConfig.filePath + '/config/app-config.json').toString);
     var siteConfig = JSON.parse(fs.readFileSync(globalVars.appConfig.filePath + '/config/site-config.json').toString);
     
