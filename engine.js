@@ -10,7 +10,7 @@ var http = require('http');
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
 var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
 
-var globals = {
+var globalVars = {
     //Info relating to the final, surfaced web site.
     siteConfig: {
         "description": "",
@@ -34,13 +34,13 @@ var globals = {
 app.use(favicon(__dirname + '/favicon.ico'));
 
 //The meow templating engine. It's silly. It's unnecessary. But eh, why not?
-app.engine('meow', function(globals.appConfig.filePath, options, callback) {
-    fs.readFile(globals.appConfig.filePath, function(err, content) {
+app.engine('meow', function(filePath, options, callback) {
+    fs.readFile(filePath, function(err, content) {
         if (err) {
             return callback(new Error(err));
         }
         var rendered = "";
-        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globals.siteConfig.metaDescription).replace("{{meta-keywords}}", globals.siteConfig.metaKeywords).replace("{{meta-author}}", globals.siteConfig.metaAuthor).replace("{{description}}", globals.siteConfig.description).replace("{{navbar}}", globals.siteConfig.navbar);
+        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globalVars.siteConfig.metaDescription).replace("{{meta-keywords}}", globalVars.siteConfig.metaKeywords).replace("{{meta-author}}", globalVars.siteConfig.metaAuthor).replace("{{description}}", globalVars.siteConfig.description).replace("{{navbar}}", globalVars.siteConfig.navbar);
         
         return callback(null, rendered);
     });
@@ -50,43 +50,35 @@ app.engine('meow', function(globals.appConfig.filePath, options, callback) {
 app.set('views', './views');
 app.set('view engine', 'meow');
 
-/*Base path to where the blog and pages folders live. This means you can host the blog in a 
-    folder that is completely separate from where the source code lives. The reason behind this
-    is since the whole impetus behind the engine is to use Dropbox as a source for syncing and dropping
-    markdown files, and this lets that be done in a dropbox folder somewhere, while the code lives in a 
-    code folder somewhere else. 
-    
-    Moral of the story: replace "." with the path to the '/blog/' folder, following the data-based 
-    sub-directory conventions laid out (eventually) in the README.
-*/
+
 
 function loadConfigs() {
     
     //DESPERATELY NEEDS ERROR HANDLING FOR BAD FILES HERE
     
-    var description = fs.readFileSync(globals.appConfig.filePath + '/config/description.md'); 
-    var navbar = fs.readFileSync(globals.appConfig.filePath + '/config/navbar.md');
-    var appConfig = JSON.parse(fs.readFileSync(globals.appConfig.filePath + '/config/app-config.json').toString);
-    var siteConfig = JSON.parse(fs.readFileSync(globals.appConfig.filePath + '/config/site-config.json').toString);
+    var description = fs.readFileSync(globalVars.appConfig.filePath + '/config/description.md'); 
+    var navbar = fs.readFileSync(globalVars.appConfig.filePath + '/config/navbar.md');
+    var appConfig = JSON.parse(fs.readFileSync(globalVars.appConfig.filePath + '/config/app-config.json').toString);
+    var siteConfig = JSON.parse(fs.readFileSync(globalVars.appConfig.filePath + '/config/site-config.json').toString);
     
-    globals.siteConfig.description = marked(description.toString());
-    globals.siteConfig.navbar = marked(navbar.toString());
-    globals.siteConfig.metaDescription = siteConfig.metaDescription;
-    globals.siteConfig.metaAuthor = siteConfig.metaAuthor;
-    globals.siteConfig.metaKeywords = siteConfig.metaKeywords;
-    globals.siteConfig.defaultTitle = siteConfig.defaultTitle;
+    globalVars.siteConfig.description = marked(description.toString());
+    globalVars.siteConfig.navbar = marked(navbar.toString());
+    globalVars.siteConfig.metaDescription = siteConfig.metaDescription;
+    globalVars.siteConfig.metaAuthor = siteConfig.metaAuthor;
+    globalVars.siteConfig.metaKeywords = siteConfig.metaKeywords;
+    globalVars.siteConfig.defaultTitle = siteConfig.defaultTitle;
     
-    globals.appConfig.configTTL = appConfig.configTTL;
-    globals.appConfig.port = appConfig.port;
-    globals.appConfig.filePath = appConfig.filePath;
+    globalVars.appConfig.configTTL = appConfig.configTTL;
+    globalVars.appConfig.port = appConfig.port;
+    globalVars.appConfig.filePath = appConfig.filePath;
     
-    globals.appConfig.lastPulled = Date.now();
+    globalVars.appConfig.lastPulled = Date.now();
 }
 
 loadConfigs();
 
 //Handle the static files
-app.use(express.static(globals.appConfig.filePath + '/static'));
+app.use(express.static(globalVars.appConfig.filePath + '/static'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
@@ -95,11 +87,11 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 //Route handler for the homepage, responsible for creating the blogroll
 app.get('/', function(req, res) {
     
-    if (Date.now() - globals.config.lastPulled > 1800000) {
+    if (Date.now() - globalVars.config.lastPulled > 1800000) {
         loadConfigs();
     }
     
-    fs.readFile(globals.appConfig.filePath + '/blog/postList.json', function(err, content) {
+    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
             console.log(err);
             return;
@@ -112,7 +104,7 @@ app.get('/', function(req, res) {
         var blogRollPosts = [5];
         for (var i = 0; i < 5; i++) {
             if (i < postList.posts.length) {
-                blogRollPosts[i] = fs.readFileSync(globals.appConfig.filePath + '/blog/' + postList.posts[i]);
+                blogRollPosts[i] = fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]);
             } else {
                 blogRollPosts[i] = null;
             }
@@ -126,13 +118,13 @@ app.get('/', function(req, res) {
             }
         }
         blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
-        res.render('index', {body: blogRollHTML, title: globals.siteConfig.defaultTitle});
+        res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
     });
 });
 
 //Route handler for the full, infinite scroll blogroll.
 app.get('/blogroll', function(req, res) {
-    fs.readFile(globals.appConfig.filePath + '/blog/postList.json', function(err, content) {
+    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
             console.log(err);
             return;
@@ -145,7 +137,7 @@ app.get('/blogroll', function(req, res) {
         var blogRollHTML = "";
         var blogRollPosts = [numPosts];
         for (var i = 0; i < numPosts; i++) {
-            blogRollPosts[i] = fs.readFileSync(globals.appConfig.filePath + '/blog/' + postList.posts[i]);
+            blogRollPosts[i] = fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]);
         }
         
         //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
@@ -156,7 +148,7 @@ app.get('/blogroll', function(req, res) {
             }
         }
         blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
-        res.render('index', {body: blogRollHTML, title: globals.siteConfig.defaultTitle});
+        res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
     });
 });
 
@@ -175,7 +167,7 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
 
 //Route handler for the monthly archive pages. Basically a modified index blogroll page.
 app.get('/blog/:year/:month/', function(req, res) {
-    fs.readFile(globals.appConfig.filePath + '/blog/postList.json', function(err, content) {
+    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
             return callback(new Error(err));
         } 
@@ -189,7 +181,7 @@ app.get('/blog/:year/:month/', function(req, res) {
         var blogRollPosts = [];
         for (var i = 0; i < postList.posts.length; i++) {
             if (postList.posts[i].toString().indexOf(dateString) !== -1) {
-                blogRollPosts.push(fs.readFileSync(globals.appConfig.filePath + '/blog/' + postList.posts[i]));
+                blogRollPosts.push(fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]));
             }
         }
         
@@ -200,7 +192,7 @@ app.get('/blog/:year/:month/', function(req, res) {
                 blogRollHTML += "<br>";
             }
         }
-        res.render('index', {body: blogRollHTML, title: globals.siteConfig.defaultTitle});
+        res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
     });
 });
 
@@ -229,14 +221,14 @@ app.get('/*', function(req, res) {
 
 //Wrapper to handle filepaths to reading the blog markdown files
 var grabBlogMarkdown = function(post, path, callback) {
-    fs.readFile(globals.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
+    fs.readFile(globalVars.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
         callback(err, data);
     });
 };
 
 //Wrapper to handle filepaths to reading the static page markdown files
 var grabPageMarkdown = function(post, callback) {
-    fs.readFile(globals.appConfig.filePath + '/page/' + post + '.md', function(err, data) {
+    fs.readFile(globalVars.appConfig.filePath + '/page/' + post + '.md', function(err, data) {
         callback(err, data);
     });
 };
@@ -261,4 +253,5 @@ var processPost = function(postData) {
     return {"html": postBodyHTML, "title": metaDataParsed.Title};
 }
 
-http.createServer(app).listen(globals.appConfig.port);
+http.createServer(app).listen(globalVars.appConfig.port);
+
