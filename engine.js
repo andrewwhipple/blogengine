@@ -18,7 +18,9 @@ var globalVars = {
         "metaDescription": "",
         "metaKeywords": "",
         "metaAuthor": "",
-        "defaultTitle": ""
+        "defaultTitle": "",
+        "footerAd": "",
+        "analytics": ""
     },
     //Info relating to the running of the app code
     "appConfig": {
@@ -40,7 +42,7 @@ app.engine('meow', function(filePath, options, callback) {
             return callback(new Error(err));
         }
         var rendered = "";
-        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globalVars.siteConfig.metaDescription).replace("{{meta-keywords}}", globalVars.siteConfig.metaKeywords).replace("{{meta-author}}", globalVars.siteConfig.metaAuthor).replace("{{description}}", globalVars.siteConfig.description).replace("{{navbar}}", globalVars.siteConfig.navbar);
+        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globalVars.siteConfig.metaDescription).replace("{{meta-keywords}}", globalVars.siteConfig.metaKeywords).replace("{{meta-author}}", globalVars.siteConfig.metaAuthor).replace("{{description}}", globalVars.siteConfig.description).replace("{{navbar}}", globalVars.siteConfig.navbar).replace("{{footerAd}}", globalVars.siteConfig.footerAd).replace("{{analytics}}", globalVars.siteConfig.analytics);
         
         return callback(null, rendered);
     });
@@ -67,6 +69,8 @@ function loadConfigs() {
     globalVars.siteConfig.metaAuthor = siteConfig.metaAuthor;
     globalVars.siteConfig.metaKeywords = siteConfig.metaKeywords;
     globalVars.siteConfig.defaultTitle = siteConfig.defaultTitle;
+    globalVars.siteConfig.footerAd = siteConfig.footerAd;
+    globalVars.siteConfig.analytics = siteConfig.analytics;
     
     globalVars.appConfig.configTTL = appConfig.configTTL;
     globalVars.appConfig.port = appConfig.port;
