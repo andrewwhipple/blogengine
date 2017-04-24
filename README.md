@@ -8,21 +8,22 @@ A repo for a home-built blog engine, mostly just to experiment and get better at
 , and 404s.
 * Dead-simple rendering engine, literally just replaces {{title}} and {{body}} and date things with stuff.
 * A grossly-implemented blogroll with 5 posts on the main page, but NEEDS TO BE MANUALLY UPDATED IN postList.json!
-* Metadata: at the top of all markdown pages for blog posts, include (IN ONE LINE!!!) '@@: "Title": "title", "OtherMetadata": "Other" :@@
+* Psuedo-metadata: at the top of all markdown pages for blog posts, include (IN ONE LINE!!!) '@@: "Title": "title", "OtherMetadata": "Other" :@@
 * Month archive blogroll thing (like marco.org) though with same metadata problem as the index page.
 * The weird metadata bug fixed
 * Link posts/permalinks
+* Pulling app configs (stuff like port, filepath, etc) and site configs (stuff like the description, navbar links, site meta-tags) into json config files so they can be changed w/o a deploy
+* (My own shenanigans w/ the server setup to use SSL, but it's just an nginx reverse proxy so not actually part of this codebase)
 
 
 ### To do
 
 * Theme handling?
-* Metadata
+* Metadata on a per-post basis
 * Tags
 * Search?
-* ideally some sort of caching so it doesnt have to do a file read every goddamn time, and 5+ times whenever the index is hit. 
+* ideally some sort of caching so it doesnt have to do a file read every goshdang time, and 5+ times whenever the index is hit. 
 * Some sort of automaticity to the post updating, since it's a bit of a chore to add a new post.
-* Footnotes, probably.
 
 ### Post Formatting:
 
