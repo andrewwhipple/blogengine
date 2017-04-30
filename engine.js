@@ -5,13 +5,13 @@ var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
 var http = require('http');
-var cacher = require('./cache.js');
+//var cacher = require('./cache.js');
 
 //Loading the templates into memory.
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
 var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
 
-var cache = new cacher();
+//var cache = new cacher();
 
 var globalVars = {
     //Info relating to the final, surfaced web site.
@@ -96,10 +96,10 @@ app.get('/', function(req, res) {
         loadConfigs();
     }
     
-    var cachedBlogroll = cache.getBlogroll();
+    //var cachedBlogroll = cache.getBlogroll();
     
-    if (cachedBlogroll) {
-        res.render('index', {body: cachedBlogroll, title: globalVars.siteConfig.defaultTitle});  
+    if (false) {
+        res.render('index', {body: 'cachedBlogroll', title: globalVars.siteConfig.defaultTitle});  
     } else {
         fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
             if (err) {
@@ -129,7 +129,7 @@ app.get('/', function(req, res) {
             }
             blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
             
-            cache.cacheBlogroll(blogRollHTML);
+            //cache.cacheBlogroll(blogRollHTML);
             
             res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
         });
