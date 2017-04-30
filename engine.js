@@ -5,10 +5,13 @@ var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
 var http = require('http');
+var cacher = require('./cache.js');
 
 //Loading the templates into memory.
 var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
 var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
+
+var cache = new cacher();
 
 var globalVars = {
     //Info relating to the final, surfaced web site.
@@ -45,6 +48,8 @@ app.engine('meow', function(filePath, options, callback) {
         return callback(null, rendered);
     });
 });
+
+
 
 //Setting the views directory and the view engine
 app.set('views', './views');
@@ -91,35 +96,44 @@ app.get('/', function(req, res) {
         loadConfigs();
     }
     
-    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
-        if (err) {
-            console.log(err);
-            return;
-        } 
-        var postList = JSON.parse(content);
-        //Ordering is by date, most recent first, and reverse alphabetical if multiple on one day.
-        postList.posts.sort();
-        postList.posts.reverse();
-        var blogRollHTML = "";
-        var blogRollPosts = [5];
-        for (var i = 0; i < 5; i++) {
-            if (i < postList.posts.length) {
-                blogRollPosts[i] = fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]);
-            } else {
-                blogRollPosts[i] = null;
+    let cachedBlogroll = cache.getBlogroll();
+    
+    if (cachedBlogroll) {
+        res.render('index', {body: cachedBlogroll, title: globalVars.siteConfig.defaultTitle});  
+    } else {
+        fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
+            if (err) {
+                console.log(err);
+                return;
+            } 
+            var postList = JSON.parse(content);
+            //Ordering is by date, most recent first, and reverse alphabetical if multiple on one day.
+            postList.posts.sort();
+            postList.posts.reverse();
+            var blogRollHTML = "";
+            var blogRollPosts = [5];
+            for (var i = 0; i < 5; i++) {
+                if (i < postList.posts.length) {
+                    blogRollPosts[i] = fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]);
+                } else {
+                    blogRollPosts[i] = null;
+                }
             }
-        }
-        
-        //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
-        for (var j = 0; j < 5; j++) {
-            if (blogRollPosts[j]) {            
-                blogRollHTML += processPost(blogRollPosts[j]).html;
-                blogRollHTML += "<br>";
+
+            //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
+            for (var j = 0; j < 5; j++) {
+                if (blogRollPosts[j]) {            
+                    blogRollHTML += processPost(blogRollPosts[j]).html;
+                    blogRollHTML += "<br>";
+                }
             }
-        }
-        blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
-        res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
-    });
+            blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+            
+            cache.cacheBlogroll(blogRollHTML);
+            
+            res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
+        });
+    }
 });
 
 //Route handler for the full, infinite scroll blogroll.
