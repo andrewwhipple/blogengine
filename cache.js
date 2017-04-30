@@ -52,7 +52,7 @@ class Cache {
             return null;
         }
         
-        for (let i = 0; i < this._postCacheList.length; i++) {
+        for (var i = 0; i < this._postCacheList.length; i++) {
             if (this._postCacheList[i].urlPath === urlPath) {
                 return this._postCacheList[i].html;
             }
@@ -62,19 +62,19 @@ class Cache {
     
     
      _getBlogrollAge() {
-        let currentTime = new Date();
+        var currentTime = new Date();
         return (currentTime - this._blogrollCacheStarted);
     }
     
     _getCacheAge() {
-        let currentTime = new Date();
+        var currentTime = new Date();
         return (currentTime - this._cacheStarted)
     }
     
 }
 
 function createCache(maxSize, maxCacheAge, maxBlogrollAge) {
-    let cache = new Cache(maxSize, maxCacheAge, maxBlogrollAge);
+    var cache = new Cache(maxSize, maxCacheAge, maxBlogrollAge);
     return cache;
 }
 

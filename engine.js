@@ -96,7 +96,7 @@ app.get('/', function(req, res) {
         loadConfigs();
     }
     
-    let cachedBlogroll = cache.getBlogroll();
+    var cachedBlogroll = cache.getBlogroll();
     
     if (cachedBlogroll) {
         res.render('index', {body: cachedBlogroll, title: globalVars.siteConfig.defaultTitle});  
