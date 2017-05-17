@@ -1,7 +1,0 @@
-<div class="mw-post"> 
-    <h1 class="mw-post-title"><a href="{{link}}">{{title}}</a></h1>
-    <p class="mw-post-pub-date"><em>Published {{date}}</em></p>
-    <div class="mw-post-content">
-        {{content}}
-    </div>
-</div>

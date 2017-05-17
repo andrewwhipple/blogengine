@@ -15,42 +15,42 @@
     </head>
 
     <body>
-        <div class="mw-body container">
+        <div class="am-body container">
             
-            <div class="mw-header ">
-                <div class="mw-header-content">
+            <div class="am-header ">
+                <div class="am-header-content">
                     
-                    <h1 class="mw-header-title"><a class="mw-header-title-no-highlight" href="/">Andrew Whipple</a></h1>
-                    <p class="mw-header-description">{{description}}</p>
+                    <h1 class="am-header-title"><a class="am-header-title-no-highlight" href="/">Andrew Whipple</a></h1>
+                    <p class="am-header-description">{{description}}</p>
             
             
-                    <div class="mw-navbar">
+                    <div class="am-navbar">
                         <h4>{{navbar}}</h4>
                     </div>
                 </div>
             </div>
             <div>
-                <div class="mw-body-content">
+                <div class="am-body-content">
                     {{body}}
             
                 </div>
                 
             </div>
             <div>
-                <div class="mw-footer">
-                    <div class="mw-footer-ad">
+                <div class="am-footer">
+                    <div class="am-footer-ad">
                         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- Homepage Footer -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9513164240234984"
-     data-ad-slot="3907764153"
-     data-ad-format="auto"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+                        <!-- Homepage Footer -->
+                        <ins class="adsbygoogle"
+                            style="display:block"
+                            data-ad-client="ca-pub-9513164240234984"
+                            data-ad-slot="3907764153"
+                            data-ad-format="auto"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
                     </div>
-                    <p class="mw-footer-text">© Andrew Whipple 2016</p>
+                    <p class="am-footer-text">© Andrew Whipple {{copyrightYear}}</p>
                 </div>
             </div>
         </div>

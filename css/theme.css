@@ -1,5 +1,3 @@
-
-
 a, a:visited, a:active {
     color: #36ABD9;
 }
@@ -7,7 +5,6 @@ a, a:visited, a:active {
 a:hover {
     color: #023859;
 }
-
 
 body {
     background-color: #F2F2F2;
@@ -29,27 +26,27 @@ img {
     max-width: 40em;
 }
 
-.mw-header {
+.am-header {
     background-color: #023859;
     margin-left: auto;
     margin-right: auto;
 }
 
 @media (min-width: 768px) {
-    .mw-header {
+    .am-header {
         margin-left: -15%;
         margin-right: -15%;
     }
 }
 
 @media (min-width: 1500px) {
-    .mw-header {
+    .am-header {
         margin-left: -50%;
         margin-right: -50%;
     }
 }
 
-.mw-header-content {
+.am-header-content {
     display: block;
     padding-left: 3%;
     padding-right: 3%;
@@ -61,41 +58,38 @@ img {
     color: #F2F2F2;
 }
 
-.mw-header-content a:hover {
+.am-header-content a:hover {
     color: #F2F2F2;
 }
 
-.mw-navbar a {
+.am-navbar a {
     color: #F2F2F2;
 }
 
-a.mw-header-title-no-highlight {
+a.am-header-title-no-highlight {
     color: #F2F2F2;
 }
 
-.mw-body {
+.am-body {
     padding-left: 20px;
     padding-right: 20px;
 }
 
 
-.mw-post-title a {
+.am-post-title a {
     text-decoration: none;
     color: #023859;
 }
 
-.mw-post-title a:hover, .mw-post-title a:visited {
+.am-post-title a:hover, .am-post-title a:visited {
     color: #023859;
 }
 
-
-.mw-linkpost-pub-date, .mw-post-pub-date {
+.am-linkpost-pub-date, .am-post-pub-date {
     color: gray;
 }
 
-
-
-.mw-post, .mw-linkpost, .mw-page {
+.am-post, .am-linkpost, .am-page {
     border-bottom: 1px solid gray;
     padding-bottom: 2%;
     padding-left: 3%;
@@ -105,12 +99,12 @@ a.mw-header-title-no-highlight {
     margin-right: auto;
 }
 
-.mw-footer-text {
+.am-footer-text {
     color: gray;
     text-align: center;
 }
 
-.mw-footer {
+.am-footer {
     padding-top: 2%;
 }
 

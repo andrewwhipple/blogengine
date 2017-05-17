@@ -8,8 +8,8 @@ var http = require('http');
 //var cacher = require('./cache.js');
 
 //Loading the templates into memory.
-var postTemplate = fs.readFileSync("./views/postTemplate.meow").toString();
-var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.meow").toString();
+var postTemplate = fs.readFileSync("./views/postTemplate.spoon").toString();
+var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.spoon").toString();
 
 //var cache = new cacher();
 
@@ -37,13 +37,14 @@ var globalVars = {
 app.use(favicon(__dirname + '/favicon.ico'));
 
 //The meow templating engine. It's silly. It's unnecessary. But eh, why not?
-app.engine('meow', function(filePath, options, callback) {
+app.engine('spoon', function(filePath, options, callback) {
     fs.readFile(filePath, function(err, content) {
         if (err) {
             return callback(new Error(err));
         }
         var rendered = "";
-        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globalVars.siteConfig.metaDescription).replace("{{meta-keywords}}", globalVars.siteConfig.metaKeywords).replace("{{meta-author}}", globalVars.siteConfig.metaAuthor).replace("{{description}}", globalVars.siteConfig.description).replace("{{navbar}}", globalVars.siteConfig.navbar);
+        var now = new Date();
+        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globalVars.siteConfig.metaDescription).replace("{{meta-keywords}}", globalVars.siteConfig.metaKeywords).replace("{{meta-author}}", globalVars.siteConfig.metaAuthor).replace("{{description}}", globalVars.siteConfig.description).replace("{{navbar}}", globalVars.siteConfig.navbar).replace("{{copyrightYear}}", now.getFullYear());
         
         return callback(null, rendered);
     });
@@ -53,7 +54,7 @@ app.engine('meow', function(filePath, options, callback) {
 
 //Setting the views directory and the view engine
 app.set('views', './views');
-app.set('view engine', 'meow');
+app.set('view engine', 'spoon');
 
 
 
