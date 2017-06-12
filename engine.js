@@ -128,7 +128,7 @@ app.get('/', function(req, res) {
                     blogRollHTML += "<br>";
                 }
             }
-            blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+            blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
             
             //cache.cacheBlogroll(blogRollHTML);
             
@@ -162,7 +162,7 @@ app.get('/blogroll', function(req, res) {
                 blogRollHTML += "<br>";
             }
         }
-        blogRollHTML += ' <div class="mw-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+        blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
         res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
     });
 });
@@ -223,7 +223,7 @@ app.get('/:page', function(req, res) {
             var metaDataParsed = JSON.parse(metaDataClean);
              
             pageBodyHTML = marked(pageString.replace(/@@:.*:@@/, ""));
-            pageBodyHTML = '<div class="mw-page">' + pageBodyHTML + '</div>';
+            pageBodyHTML = '<div class="am-page">' + pageBodyHTML + '</div>';
             res.render('index', {title: metaDataParsed.Title, body: pageBodyHTML});
         }
     })
