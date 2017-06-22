@@ -132,6 +132,7 @@ app.get('/', function(req, res) {
             
             //cache.cacheBlogroll(blogRollHTML);
             
+			res.set('Cache-Control', 'public, max-age=60');
             res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
         });
     }
@@ -224,7 +225,8 @@ app.get('/:page', function(req, res) {
              
             pageBodyHTML = marked(pageString.replace(/@@:.*:@@/, ""));
             pageBodyHTML = '<div class="am-page">' + pageBodyHTML + '</div>';
-            res.render('index', {title: metaDataParsed.Title, body: pageBodyHTML});
+            res.set('Cache-Control', 'public, max-age=30');
+			res.render('index', {title: metaDataParsed.Title, body: pageBodyHTML});
         }
     })
 });
