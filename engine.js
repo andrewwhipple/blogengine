@@ -132,7 +132,7 @@ app.get('/', function(req, res) {
             
             //cache.cacheBlogroll(blogRollHTML);
             
-			res.set('Cache-Control', 'public, max-age=60');
+			res.set('Cache-Control', 'public, max-age=300');
             res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
         });
     }
@@ -164,6 +164,7 @@ app.get('/blogroll', function(req, res) {
             }
         }
         blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+		res.set('Cache-Control', 'public, max-age=300');
         res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
     });
 });
@@ -175,7 +176,8 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
         if (err) {
             res.redirect('/404');
         } else {
-            var postBody = processPost(data);            
+            var postBody = processPost(data);   
+			res.set('Cache-Control', 'public, max-age=300');         
             res.render('index', {title: postBody.title, body: postBody.html});
         }
     }); 
@@ -208,6 +210,7 @@ app.get('/blog/:year/:month/', function(req, res) {
                 blogRollHTML += "<br>";
             }
         }
+		res.set('Cache-Control', 'public, max-age=300');
         res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
     });
 });
@@ -225,7 +228,7 @@ app.get('/:page', function(req, res) {
              
             pageBodyHTML = marked(pageString.replace(/@@:.*:@@/, ""));
             pageBodyHTML = '<div class="am-page">' + pageBodyHTML + '</div>';
-            res.set('Cache-Control', 'public, max-age=30');
+            res.set('Cache-Control', 'public, max-age=300');
 			res.render('index', {title: metaDataParsed.Title, body: pageBodyHTML});
         }
     })
