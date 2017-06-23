@@ -8,7 +8,7 @@
     "express": "^4.13.4",
     "marked": "^0.3.5",
     "serve-favicon": "^2.3.0",
-      "http": "*",
-      "https": "*"
+    "http": "*",
+    "es6-promise": "*"
   }
 }

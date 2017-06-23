@@ -5,10 +5,32 @@ var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
 var http = require('http');
+var Promise = require('es6-promise').Promise;
 
-//Loading the templates into memory.
-var postTemplate = fs.readFileSync("./views/postTemplate.spoon").toString();
-var linkPostTemplate = fs.readFileSync("./views/linkPostTemplate.spoon").toString();
+Promise.polyfill();
+
+function readFilePromise(fileName) {
+	return new Promise(function(resolve, reject){
+		fs.readFile(fileName, function(err, content){
+			if (err) {
+				reject(err);
+			}
+			resolve(content);
+		});
+	});
+}
+
+var templates = ["./views/postTemplate.spoon", "./views/linkPostTemplate.spoon"].map(readFilePromise);
+
+var postTemplate;
+var linkPostTemplate;
+
+Promise.all(templates).then(function(files) {
+	postTemplate = files[0].toString();
+	linkPostTemplate = files[1].toString();
+}).catch(function(err){
+	console.log(err);
+});
 
 
 var globalVars = {
@@ -28,6 +50,7 @@ var globalVars = {
         "port": 80,
         //THIS DOES NEED TO BE PRE-SET in order to load the configs, after all
         "filePath": "../Dropbox/BlogPosts"
+		//"filePath": "../../../../Dropbox/Apps/Editorial/BlogPosts"
     }
 }
 
@@ -54,29 +77,38 @@ app.engine('spoon', function(filePath, options, callback) {
 app.set('views', './views');
 app.set('view engine', 'spoon');
 
-
-
 function loadConfigs() {
     
     //DESPERATELY NEEDS ERROR HANDLING FOR BAD FILES HERE
+    var configs = ["description.md", "navbar.md", "app-config.json", "site-config.json"];
+	for (var i = 0; i < configs.length; i++) {
+		configs[i] = globalVars.appConfig.filePath + '/config/' + configs[i];
+	}
+	configs = configs.map(readFilePromise);
+	
+	Promise.all(configs)
+		.then(function(files) {
+			globalVars.siteConfig.description = marked(files[0].toString());
+			globalVars.siteConfig.navbar = marked(files[1].toString());
+			
+			var appConfig = JSON.parse(files[2]);
+			var siteConfig = JSON.parse(files[3]);
+			
+		    globalVars.siteConfig.metaDescription = siteConfig.metaDescription;
+		    globalVars.siteConfig.metaAuthor = siteConfig.metaAuthor;
+		    globalVars.siteConfig.metaKeywords = siteConfig.metaKeywords;
+		    globalVars.siteConfig.defaultTitle = siteConfig.defaultTitle;
     
-    var description = fs.readFileSync(globalVars.appConfig.filePath + '/config/description.md'); 
-    var navbar = fs.readFileSync(globalVars.appConfig.filePath + '/config/navbar.md');
-    var appConfig = JSON.parse(fs.readFileSync(globalVars.appConfig.filePath + '/config/app-config.json').toString());
-    var siteConfig = JSON.parse(fs.readFileSync(globalVars.appConfig.filePath + '/config/site-config.json').toString());
-    
-    globalVars.siteConfig.description = marked(description.toString());
-    globalVars.siteConfig.navbar = marked(navbar.toString());
-    globalVars.siteConfig.metaDescription = siteConfig.metaDescription;
-    globalVars.siteConfig.metaAuthor = siteConfig.metaAuthor;
-    globalVars.siteConfig.metaKeywords = siteConfig.metaKeywords;
-    globalVars.siteConfig.defaultTitle = siteConfig.defaultTitle;
-    
-    globalVars.appConfig.configTTL = appConfig.configTTL;
-    globalVars.appConfig.port = appConfig.port;
-    globalVars.appConfig.filePath = appConfig.filePath;
-    
-    globalVars.appConfig.lastPulled = Date.now();
+		    globalVars.appConfig.configTTL = appConfig.configTTL;
+		    globalVars.appConfig.port = appConfig.port;
+		    globalVars.appConfig.filePath = appConfig.filePath;
+			
+			globalVars.appConfig.lastPulled = Date.now();
+			
+		
+		}).catch(function(err){
+			console.log(err);
+		});
 }
 
 loadConfigs();
@@ -91,7 +123,7 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 //Route handler for the homepage, responsible for creating the blogroll
 app.get('/', function(req, res) {
     
-    if (Date.now() - globalVars.appConfig.lastPulled > 1800000) {
+    if (Date.now() - globalVars.appConfig.lastPulled > globalVars.appConfig.configTTL) {
         loadConfigs();
     }    
    
@@ -105,29 +137,33 @@ app.get('/', function(req, res) {
 		postList.posts.sort();
 		postList.posts.reverse();
 		var blogRollHTML = "";
-		var blogRollPosts = [5];
+		
+		blogRollPosts = [];
+
 		for (var i = 0; i < 5; i++) {
 			if (i < postList.posts.length) {
-				blogRollPosts[i] = fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]);
-			} else {
-				blogRollPosts[i] = null;
+				blogRollPosts[i] = globalVars.appConfig.filePath + '/blog/' + postList.posts[i];
 			}
 		}
+		
+		blogRollPosts = blogRollPosts.map(readFilePromise);
 
-		//NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
-		for (var j = 0; j < 5; j++) {
-			if (blogRollPosts[j]) {            
-				blogRollHTML += processPost(blogRollPosts[j]).html;
+		Promise.all(blogRollPosts).then(function(posts) {
+					
+			for (var j = 0; j < posts.length; j++) {
+				blogRollHTML += processPost(posts[j]).html;
 				blogRollHTML += "<br>";
 			}
-		}
-		blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
-            
-            
-		res.set('Cache-Control', 'public, max-age=300');
-		res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
+			
+			blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+        	
+			res.set('Cache-Control', 'public, max-age=300');
+			res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
+	
+		}).catch(function(err) {
+			console.log(err);
+		});
 	});
-  
 });
 
 //Route handler for the full, infinite scroll blogroll.
