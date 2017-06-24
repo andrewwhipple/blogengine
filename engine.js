@@ -9,6 +9,7 @@ var Promise = require('es6-promise').Promise;
 
 Promise.polyfill();
 
+//Wrapping the async readFile calls in a promise!
 function readFilePromise(fileName) {
 	return new Promise(function(resolve, reject){
 		fs.readFile(fileName, function(err, content){
@@ -120,6 +121,50 @@ app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
 //app.use('/static', express.static(filePath + '/static'));
 
+
+function getBlogroll(numPosts) {
+    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
+        if (err) {
+			console.log(err);
+			return;
+		} 
+		var postList = JSON.parse(content);
+		//Ordering is by date, most recent first, and reverse alphabetical if multiple on one day.
+		postList.posts.sort();
+		postList.posts.reverse();
+		var blogRollHTML = "";
+		
+		blogRollPosts = [];
+
+		for (var i = 0; i < numPosts; i++) {
+			if (i < postList.posts.length) {
+				blogRollPosts[i] = globalVars.appConfig.filePath + '/blog/' + postList.posts[i];
+			} else {
+				return;
+			}
+		}
+		
+		blogRollPosts = blogRollPosts.map(readFilePromise);
+
+		Promise.all(blogRollPosts).then(function(posts) {
+					
+			for (var j = 0; j < posts.length; j++) {
+				blogRollHTML += processPost(posts[j]).html;
+				blogRollHTML += "<br>";
+			}
+			
+			blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
+        	
+			res.set('Cache-Control', 'public, max-age=300');
+			res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
+	
+		}).catch(function(err) {
+			console.log(err);
+		});
+	});
+}
+
+
 //Route handler for the homepage, responsible for creating the blogroll
 app.get('/', function(req, res) {
     
@@ -127,7 +172,9 @@ app.get('/', function(req, res) {
         loadConfigs();
     }    
    
-    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
+   	getBlogroll(5);
+   
+    /*fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
 			console.log(err);
 			return;
@@ -163,12 +210,15 @@ app.get('/', function(req, res) {
 		}).catch(function(err) {
 			console.log(err);
 		});
-	});
+	});*/
 });
 
 //Route handler for the full, infinite scroll blogroll.
 app.get('/blogroll', function(req, res) {
-    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
+    
+	getBlogroll(100);
+	
+	/*fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
             console.log(err);
             return;
@@ -194,7 +244,7 @@ app.get('/blogroll', function(req, res) {
         blogRollHTML += ' <div class="am-post"><a href="/archive"><h4>(More posts ➡)</h5></a></div>'
 		res.set('Cache-Control', 'public, max-age=300');
         res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
-    });
+    });*/
 });
 
 //Route handler for individual blog post permalinks
