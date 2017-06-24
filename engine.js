@@ -122,7 +122,7 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 //app.use('/static', express.static(filePath + '/static'));
 
 
-function getBlogroll(numPosts) {
+function getBlogroll(req, res, numPosts) {
     fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
 			console.log(err);
@@ -172,7 +172,7 @@ app.get('/', function(req, res) {
         loadConfigs();
     }    
    
-   	getBlogroll(5);
+   	getBlogroll(req, res, 5);
    
     /*fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
@@ -216,7 +216,7 @@ app.get('/', function(req, res) {
 //Route handler for the full, infinite scroll blogroll.
 app.get('/blogroll', function(req, res) {
     
-	getBlogroll(100);
+	getBlogroll(req, res, 100);
 	
 	/*fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
