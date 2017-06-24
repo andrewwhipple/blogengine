@@ -183,7 +183,7 @@ app.get('/', function(req, res) {
 //Route handler for the full, infinite scroll blogroll.
 app.get('/blogroll', function(req, res) {
     
-	getBlogroll(res, 100;
+	getBlogroll(res, 100);
 	
 });
 
