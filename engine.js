@@ -140,7 +140,7 @@ function getBlogroll(req, res, numPosts) {
 			if (i < postList.posts.length) {
 				blogRollPosts[i] = globalVars.appConfig.filePath + '/blog/' + postList.posts[i];
 			} else {
-				return;
+				break;
 			}
 		}
 		
