@@ -183,12 +183,8 @@ Passes into the callback the errors (if any) and the markdown from the file, as 
 */
 function getBlogMarkdown(post, path, callback) {
     fs.readFile(globalVars.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
-        if (!err) {
-        	callback(err, data.toString());
-        } else {
-        	callback(err, data);
-        }
-		
+        if (!err) data = data.toString();
+        callback(err, data);
     });
 };
 
@@ -200,11 +196,8 @@ Passes into the callback the errors (if any) and the markdown from the file, as 
 */
 function getPageMarkdown(page, callback) {
     fs.readFile(globalVars.appConfig.filePath + '/page/' + page + '.md', function(err, data) {
-        if (!err) {
-        	callback(err, data.toString());
-        } else {
-        	callback(err, data);
-        }
+        if (!err) data = data.toString();
+        callback(err, data);
     });
 };
 
