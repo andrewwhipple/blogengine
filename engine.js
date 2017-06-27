@@ -183,7 +183,7 @@ Passes into the callback the errors (if any) and the markdown from the file, as 
 */
 function getBlogMarkdown(post, path, callback) {
     fs.readFile(globalVars.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
-        callback(err, data.toString(());
+        callback(err, data.toString());
     });
 };
 
