@@ -1,11 +1,14 @@
 # blogengine
 A repo for a home-built blog engine, mostly just to experiment and get better at webdev (especially Node.js)
 
+In terms of inspiration, the idea of starting from scratch with a lightweight, new CMS written in Node came from seeing [Casey Liss](https://caseyliss.com) do the same with his engine [Camel](https://github.com/cliss/camel). I don't recall ever actually reading anything beyond Camel's README so I believe the only technical inspiration was using "@" signs to highlight metadata (though in a different way) but there may be unintentional inspiration snuck in.
+
+*Design-wise* there's absolutely no question that [the site it currently powers](https://www.andrewwhipple.com) was *exceptionally* inspired by both [Casey Liss'](https://caseyliss.com) and [Marco Arment's](https://marco.org) blogs. 
+
 
 ### Done
 
-* Basic routing up and running, routing to index ('/'), blog permalinks ('/blog/:year/:month/:day/:filename), static pages ('/:pageFileName')
-, and 404s.
+* Basic routing up and running, routing to index ('/'), blog permalinks ('/blog/:year/:month/:day/:filename), static pages ('/:pageFileName'), and 404s.
 * Dead-simple rendering engine, literally just replaces {{title}} and {{body}} and date things with stuff.
 * A grossly-implemented blogroll with 5 posts on the main page, but NEEDS TO BE MANUALLY UPDATED IN postList.json!
 * Psuedo-metadata: at the top of all markdown pages for blog posts, include (IN ONE LINE!!!) '@@: "Title": "title", "OtherMetadata": "Other" :@@
@@ -29,6 +32,7 @@ A repo for a home-built blog engine, mostly just to experiment and get better at
 * Some sort of automaticity to the post updating, since it's a bit of a chore to add a new post.
 * Better decomposition, especially of some of the GET handlers
 * Testing with a fresh install on a new server to make sure the setup script works and the code is suitably generic
+* Once everything seems solid, write up documentation, transfer to a new repo for actual clean usage, and turn this into the "andrewwhipple.com" repo.
 
 
 ### Post Formatting:
