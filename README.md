@@ -1,9 +1,9 @@
 # blogengine
 A repo for a home-built blog engine, mostly just to experiment and get better at webdev (especially Node.js)
 
-In terms of inspiration, the idea of starting from scratch with a lightweight, new CMS written in Node came from seeing [Casey Liss](https://caseyliss.com) do the same with his engine [Camel](https://github.com/cliss/camel). I don't recall ever actually reading anything beyond Camel's README so I believe the only technical inspiration was using "@" signs to highlight metadata (though in a different way) but there may be unintentional inspiration snuck in.
+In terms of inspiration, the idea of starting from scratch with a lightweight, new CMS written in Node came from seeing [Casey Liss](http://caseyliss.com) do the same with his engine [Camel](https://github.com/cliss/camel). I don't recall ever actually reading anything beyond Camel's README so I believe the only technical inspiration was using "@" signs to highlight metadata (though in a different way) but there may be unintentional inspiration snuck in.
 
-*Design-wise* there's absolutely no question that [the site it currently powers](https://www.andrewwhipple.com) was *exceptionally* inspired by both [Casey Liss'](https://caseyliss.com) and [Marco Arment's](https://marco.org) blogs. 
+*Design-wise* there's absolutely no question that [the site it currently powers](https://www.andrewwhipple.com) was *exceptionally* inspired by both [Casey Liss'](http://caseyliss.com) and [Marco Arment's](https://marco.org) blogs. 
 
 
 ### Done
