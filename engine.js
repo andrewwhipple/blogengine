@@ -38,10 +38,8 @@ var globalVars = {
         "lastPulled": null,
         "configTTL": 1800000,
         "port": 80,
-        //THIS DOES NEED TO BE PRE-SET in order to load the configs, after all
-        "filePath": process.env.AM_FILEPATH, //"../Dropbox/BlogPosts",
+        "filePath": process.env.AM_FILEPATH, //This is set in the "setup.sh" script, but on subsequent starts may need to be set in a startup script or equivalent. More info in README.
 		"cacheMaxAge": 300
-		//"filePath": "../../../../Dropbox/Apps/Editorial/BlogPosts"
     }
 }
 
@@ -66,6 +64,7 @@ app.engine('spoon', function(filePath, options, callback) {
 app.set('views', './views');
 app.set('view engine', 'spoon');
 
+//Load the post templates into memory.
 function loadTemplates() {
 	var templates = ["./views/postTemplate.spoon", "./views/linkPostTemplate.spoon"].map(readFilePromise);
 
@@ -77,6 +76,7 @@ function loadTemplates() {
 	});
 }
 
+//Load the configuration files into memory.
 function loadConfigs() {
     
     //DESPERATELY NEEDS ERROR HANDLING FOR BAD FILES HERE
@@ -94,15 +94,17 @@ function loadConfigs() {
 			var appConfig = JSON.parse(files[2]);
 			var siteConfig = JSON.parse(files[3]);
 			
+			//If the siteConfig info is mal-formed or nonexistent, will pass it through without question
 		    globalVars.siteConfig.metaDescription = siteConfig.metaDescription;
 		    globalVars.siteConfig.metaAuthor = siteConfig.metaAuthor;
 		    globalVars.siteConfig.metaKeywords = siteConfig.metaKeywords;
 		    globalVars.siteConfig.defaultTitle = siteConfig.defaultTitle;
     
-		    globalVars.appConfig.configTTL = appConfig.configTTL;
-		    globalVars.appConfig.port = appConfig.port;
-		    globalVars.appConfig.filePath = appConfig.filePath;
-			globalVars.appConfig.cacheMaxAge = appConfig.cacheMaxAge;
+			//If the appConfig info is mal-formed or nonexistent, will revert to the defaults
+		    globalVars.appConfig.configTTL = appConfig.configTTL || globalVars.appConfig.configTTL;
+		    globalVars.appConfig.port = appConfig.port || globalVars.appConfig.port;
+		    globalVars.appConfig.filePath = appConfig.filePath || globalVars.appConfig.filePath;
+			globalVars.appConfig.cacheMaxAge = appConfig.cacheMaxAge || globalVars.appConfig.cacheMaxAge;
 			
 			globalVars.appConfig.lastPulled = Date.now();
 			
@@ -120,12 +122,14 @@ app.use(express.static(globalVars.appConfig.filePath + '/static'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
-//app.use('/static', express.static(filePath + '/static'));
 
-function configTTLIsAgedOut() {
+
+//Helper function to see if the TTL for the config data has expired
+function configDataIsExpired() {
 	return Date.now() - globalVars.appConfig.lastPulled > globalVars.appConfig.configTTL;
 }
 
+//Function to create a blogroll of posts. Takes a response object from an app.get call, as well as the number of posts to render in the blogroll. Returns nothing, but sends the eventual response to the client.
 function getBlogroll(res, numPosts) {
     fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
@@ -153,7 +157,7 @@ function getBlogroll(res, numPosts) {
 		Promise.all(blogRollPosts).then(function(posts) {
 					
 			for (var j = 0; j < posts.length; j++) {
-				blogRollHTML += getPostHTML(posts[j]).html;
+				blogRollHTML += getHTMLFromMarkdown(posts[j], true).html;
 				blogRollHTML += "<br>";
 			}
 			
@@ -168,25 +172,42 @@ function getBlogroll(res, numPosts) {
 	});
 }
 
-//Wrapper to handle filepaths to reading the blog markdown files
+/*
+Wrapper to read the the Markdown data from a given blog post filename and url path.
+
+Takes the post (the filename of the blog post, minus the ".md" suffix); 
+	the path (the date-structured URL path to the post file); 
+	and the callback.
+
+Passes into the callback the errors (if any) and the markdown from the file, as a string.
+*/
 function getBlogMarkdown(post, path, callback) {
     fs.readFile(globalVars.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
-        callback(err, data);
+        callback(err, data.toString(());
     });
 };
 
-//Wrapper to handle filepaths to reading the static page markdown files
-function getPageMarkdown(post, callback) {
-    fs.readFile(globalVars.appConfig.filePath + '/page/' + post + '.md', function(err, data) {
-        callback(err, data);
+/*
+Wrapper like getBlogMarkdown, but searches the filepaths for pages. 
+Only requires the page filename (minus the ".md" suffix) and a callback.
+
+Passes into the callback the errors (if any) and the markdown from the file, as a string.
+*/
+function getPageMarkdown(page, callback) {
+    fs.readFile(globalVars.appConfig.filePath + '/page/' + page + '.md', function(err, data) {
+        callback(err, data.toString());
     });
 };
 
-//Function to process the post, given a buffer of data from a markdown file, and turn it into correct html
-function getPostHTML(postData) {
+/*
+Function to process the post, given markdown string from a markdown file, and turn it into correct html
+
+Returns an object with the html of the post body and the title of the post.
+
+*/
+/*function getPostHTML(postData) {
     var postBodyHTML = globalVars.siteConfig.postTemplate;
-    var postString = postData.toString();
-    var metaDataRaw = postString.match(/@@:.*:@@/)[0];     
+    var metaDataRaw = postData.match(/@@:.*:@@/)[0];     
     var metaDataClean = metaDataRaw.replace("@@:", "{").replace(":@@", "}");
     var metaDataParsed = JSON.parse(metaDataClean);
                 
@@ -197,15 +218,44 @@ function getPostHTML(postData) {
     
     postBodyHTML = postBodyHTML.replace("{{title}}", metaDataParsed.Title).replace("{{link}}", metaDataParsed.Link).replace("{{date}}", metaDataParsed.Date);
             
-    postBodyHTML = postBodyHTML.replace("{{content}}", marked(postString.replace(/@@:.*:@@/, "")));
+    postBodyHTML = postBodyHTML.replace("{{content}}", marked(postData.replace(/@@:.*:@@/, "")));
     
     return {"html": postBodyHTML, "title": metaDataParsed.Title};
+}*/
+
+function parseMetaData(markdown) {
+    var metaDataRaw = markdown.match(/@@:.*:@@/)[0];     
+    var metaDataClean = metaDataRaw.replace("@@:", "{").replace(":@@", "}");
+    return JSON.parse(metaDataClean);
 }
 
-//Route handler for the homepage, responsible for creating the blogroll
+function getHTMLFromMarkdown(markdown, isPost) {
+    var metaData = parseMetaData(markdown);
+	var documentHTML;
+	var contentHTML = marked(markdown.replace(/@@:.*:@@/, ""));
+	if (isPost) {
+		if (metaData.LinkPost) {
+			documentHTML = globalVars.siteConfdig.linkPostTemplate;
+			documentHTML = documentHTML.replace("{{permalink}}", metaData.permaLink);
+		} else {
+			documentHTML = globalVars.siteConfig.postTemplate;		
+		}
+		
+		documentHTML = documentHTML.replace("{{title}}", metaData.Title).replace("{{link}}", metaData.Link).replace("{{date}}", metaData.Date);
+		documentHTML = documentHTML.replace("{{content}}", contentHTML);
+	} else {
+		documentHTML = '<div class="am-page">' + contentHTML + '</div>';
+	}
+	
+	return {"html": documentHTML, "title": metaData.Title};
+	
+	
+}
+
+//Route handler for the homepage, responsible for creating the main blogroll
 app.get('/', function(req, res) {
     
-    if (configTTLIsAgedOut()) {
+    if (configDataIsExpired()) {
         loadConfigs();
     }    
    
@@ -227,7 +277,7 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
         if (err) {
             res.redirect('/404');
         } else {
-            var postBody = getPostHTML(data);   
+            var postBody = getHTMLFromMarkdown(data, true);   
 			res.set('Cache-Control', 'public, max-age=' + globalVars.appConfig.cacheMaxAge);        
             res.render('index', {title: postBody.title, body: postBody.html});
         }
@@ -257,7 +307,7 @@ app.get('/blog/:year/:month/', function(req, res) {
         //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
         for (var j = 0; j < blogRollPosts.length; j++) {
             if (blogRollPosts[j]) {      
-                blogRollHTML += getPostHTML(blogRollPosts[j]).html;
+                blogRollHTML += getHTMLFromMarkdown(blogRollPosts[j], true).html;
                 blogRollHTML += "<br>";
             }
         }
@@ -272,16 +322,10 @@ app.get('/:page', function(req, res) {
         if (err) {
             res.redirect('/404');
         } else {
-            var pageString = data.toString();
-            var metaDataRaw = pageString.match(/@@:.*:@@/)[0];
-            var metaDataClean = metaDataRaw.replace("@@:", "{").replace(":@@", "}");
-            var metaDataParsed = JSON.parse(metaDataClean);
-             
-            pageBodyHTML = marked(pageString.replace(/@@:.*:@@/, ""));
-            pageBodyHTML = '<div class="am-page">' + pageBodyHTML + '</div>';
+            var pageHTML = getHTMLFromMarkdown(data, false);
             
 			res.set('Cache-Control', 'public, max-age=' + globalVars.appConfig.cacheMaxAge);
-			res.render('index', {title: metaDataParsed.Title, body: pageBodyHTML});
+			res.render('index', {title: pageHTML.title, body: pageHTML.html});
         }
     })
 });

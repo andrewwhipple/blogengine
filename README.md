@@ -31,6 +31,7 @@ In terms of inspiration, the idea of starting from scratch with a lightweight, n
 * Search?
 * Some sort of automaticity to the post updating, since it's a bit of a chore to add a new post.
 * Better decomposition, especially of some of the GET handlers
+* In-memory caching maybe?
 * Testing with a fresh install on a new server to make sure the setup script works and the code is suitably generic
 * Once everything seems solid, write up documentation, transfer to a new repo for actual clean usage, and turn this into the "andrewwhipple.com" repo.
 
