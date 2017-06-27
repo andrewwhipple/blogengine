@@ -157,7 +157,7 @@ function getBlogroll(res, numPosts) {
 		Promise.all(blogRollPosts).then(function(posts) {
 					
 			for (var j = 0; j < posts.length; j++) {
-				blogRollHTML += getHTMLFromMarkdown(posts[j], true).html;
+				blogRollHTML += getHTMLFromMarkdown(posts[j].toString(), true).html;
 				blogRollHTML += "<br>";
 			}
 			
@@ -307,7 +307,7 @@ app.get('/blog/:year/:month/', function(req, res) {
         //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
         for (var j = 0; j < blogRollPosts.length; j++) {
             if (blogRollPosts[j]) {      
-                blogRollHTML += getHTMLFromMarkdown(blogRollPosts[j], true).html;
+                blogRollHTML += getHTMLFromMarkdown(blogRollPosts[j].toString(), true).html;
                 blogRollHTML += "<br>";
             }
         }
