@@ -39,7 +39,7 @@ var globalVars = {
         "configTTL": 1800000,
         "port": 80,
         //THIS DOES NEED TO BE PRE-SET in order to load the configs, after all
-        "filePath": "../Dropbox/BlogPosts",
+        "filePath": process.env.AM_FILEPATH, //"../Dropbox/BlogPosts",
 		"cacheMaxAge": 300
 		//"filePath": "../../../../Dropbox/Apps/Editorial/BlogPosts"
     }
@@ -153,7 +153,7 @@ function getBlogroll(res, numPosts) {
 		Promise.all(blogRollPosts).then(function(posts) {
 					
 			for (var j = 0; j < posts.length; j++) {
-				blogRollHTML += processPost(posts[j]).html;
+				blogRollHTML += getPostHTML(posts[j]).html;
 				blogRollHTML += "<br>";
 			}
 			
@@ -168,6 +168,39 @@ function getBlogroll(res, numPosts) {
 	});
 }
 
+//Wrapper to handle filepaths to reading the blog markdown files
+function getBlogMarkdown(post, path, callback) {
+    fs.readFile(globalVars.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
+        callback(err, data);
+    });
+};
+
+//Wrapper to handle filepaths to reading the static page markdown files
+function getPageMarkdown(post, callback) {
+    fs.readFile(globalVars.appConfig.filePath + '/page/' + post + '.md', function(err, data) {
+        callback(err, data);
+    });
+};
+
+//Function to process the post, given a buffer of data from a markdown file, and turn it into correct html
+function getPostHTML(postData) {
+    var postBodyHTML = globalVars.siteConfig.postTemplate;
+    var postString = postData.toString();
+    var metaDataRaw = postString.match(/@@:.*:@@/)[0];     
+    var metaDataClean = metaDataRaw.replace("@@:", "{").replace(":@@", "}");
+    var metaDataParsed = JSON.parse(metaDataClean);
+                
+    if (metaDataParsed.LinkPost) {
+        postBodyHTML = globalVars.siteConfig.linkPostTemplate;
+        postBodyHTML = postBodyHTML.replace("{{permalink}}", metaDataParsed.Permalink);
+    }
+    
+    postBodyHTML = postBodyHTML.replace("{{title}}", metaDataParsed.Title).replace("{{link}}", metaDataParsed.Link).replace("{{date}}", metaDataParsed.Date);
+            
+    postBodyHTML = postBodyHTML.replace("{{content}}", marked(postString.replace(/@@:.*:@@/, "")));
+    
+    return {"html": postBodyHTML, "title": metaDataParsed.Title};
+}
 
 //Route handler for the homepage, responsible for creating the blogroll
 app.get('/', function(req, res) {
@@ -190,11 +223,11 @@ app.get('/blogroll', function(req, res) {
 //Route handler for individual blog post permalinks
 app.get('/blog/:year/:month/:day/:post/', function(req, res) {
     var path = "" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/";
-    grabBlogMarkdown(req.params.post, path, function(err, data) {
+    getBlogMarkdown(req.params.post, path, function(err, data) {
         if (err) {
             res.redirect('/404');
         } else {
-            var postBody = processPost(data);   
+            var postBody = getPostHTML(data);   
 			res.set('Cache-Control', 'public, max-age=' + globalVars.appConfig.cacheMaxAge);        
             res.render('index', {title: postBody.title, body: postBody.html});
         }
@@ -224,7 +257,7 @@ app.get('/blog/:year/:month/', function(req, res) {
         //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
         for (var j = 0; j < blogRollPosts.length; j++) {
             if (blogRollPosts[j]) {      
-                blogRollHTML += processPost(blogRollPosts[j]).html;
+                blogRollHTML += getPostHTML(blogRollPosts[j]).html;
                 blogRollHTML += "<br>";
             }
         }
@@ -235,7 +268,7 @@ app.get('/blog/:year/:month/', function(req, res) {
 
 //Route handler for static pages
 app.get('/:page', function(req, res) {
-    grabPageMarkdown(req.params.page, function(err, data) {
+    getPageMarkdown(req.params.page, function(err, data) {
         if (err) {
             res.redirect('/404');
         } else {
@@ -257,40 +290,6 @@ app.get('/:page', function(req, res) {
 app.get('/*', function(req, res) {
    res.redirect('/404');
 });
-
-//Wrapper to handle filepaths to reading the blog markdown files
-function grabBlogMarkdown(post, path, callback) {
-    fs.readFile(globalVars.appConfig.filePath + '/blog/' + path + post + '.md', function(err, data) {        
-        callback(err, data);
-    });
-};
-
-//Wrapper to handle filepaths to reading the static page markdown files
-function grabPageMarkdown(post, callback) {
-    fs.readFile(globalVars.appConfig.filePath + '/page/' + post + '.md', function(err, data) {
-        callback(err, data);
-    });
-};
-
-//Function to process the post, given a buffer of data from a markdown file, and turn it into correct html
-function processPost(postData) {
-    var postBodyHTML = globalVars.siteConfig.postTemplate;
-    var postString = postData.toString();
-    var metaDataRaw = postString.match(/@@:.*:@@/)[0];     
-    var metaDataClean = metaDataRaw.replace("@@:", "{").replace(":@@", "}");
-    var metaDataParsed = JSON.parse(metaDataClean);
-                
-    if (metaDataParsed.LinkPost) {
-        postBodyHTML = globalVars.siteConfig.linkPostTemplate;
-        postBodyHTML = postBodyHTML.replace("{{permalink}}", metaDataParsed.Permalink);
-    }
-    
-    postBodyHTML = postBodyHTML.replace("{{title}}", metaDataParsed.Title).replace("{{link}}", metaDataParsed.Link).replace("{{date}}", metaDataParsed.Date);
-            
-    postBodyHTML = postBodyHTML.replace("{{content}}", marked(postString.replace(/@@:.*:@@/, "")));
-    
-    return {"html": postBodyHTML, "title": metaDataParsed.Title};
-}
 
 http.createServer(app).listen(globalVars.appConfig.port);
 
