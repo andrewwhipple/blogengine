@@ -13,7 +13,11 @@ A repo for a home-built blog engine, mostly just to experiment and get better at
 * The weird metadata bug fixed
 * Link posts/permalinks
 * Pulling app configs (stuff like port, filepath, etc) and site configs (stuff like the description, navbar links, site meta-tags) into json config files so they can be changed w/o a deploy
+* Finally finally FIIIIIIIINALLY replacing the hacky and entirely anti-patterny "fs.readFileSync" calls with promises. Mostly. There's still one to kill.
 * (My own shenanigans w/ the server setup to use SSL, but it's just an nginx reverse proxy so not actually part of this codebase)
+* (Also caching, but again mostly through browser caching and then ussing the nginx reverse proxy to cache in front.)
+* I *think*, as best as I can tell, that things are finally generic enough that I could spin up a new site with this engine with and it will just work? 
+
 
 
 ### To do
@@ -22,16 +26,18 @@ A repo for a home-built blog engine, mostly just to experiment and get better at
 * Metadata on a per-post basis
 * Tags
 * Search?
-* ideally some sort of caching so it doesnt have to do a file read every goshdang time, and 5+ times whenever the index is hit. 
 * Some sort of automaticity to the post updating, since it's a bit of a chore to add a new post.
+* Better decomposition, especially of some of the GET handlers
+* Testing with a fresh install on a new server to make sure the setup script works and the code is suitably generic
+
 
 ### Post Formatting:
 
 Start every post with post metadata, namely: 
 
-* "@@: "Title": "PostTitle", "Date": "PostDate", "Link": "Link", "LinkPost": bool :@@"
+`"@@: "Title": "PostTitle", "Date": "PostDate", "Link": "Link", "LinkPost": bool :@@"`
 
-If LinkPost is true, then also include the "Permalink": "PostPermalink" info in the meta data
+If `LinkPost` is `true`, then also include the `"Permalink": "PostPermalink"` info in the meta data
 
 Then start a separate line, and write whatever content you want in markdown (or html if ya nasty.)
 
