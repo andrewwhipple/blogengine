@@ -236,7 +236,7 @@ function getHTMLFromMarkdown(markdown, isPost) {
 	if (isPost) {
 		if (metaData.LinkPost) {
 			documentHTML = globalVars.siteConfig.linkPostTemplate;
-			documentHTML = documentHTML.replace("{{permalink}}", metaData.permaLink);
+			documentHTML = documentHTML.replace("{{permalink}}", metaData.PermaLink);
 		} else {
 			documentHTML = globalVars.siteConfig.postTemplate;		
 		}
