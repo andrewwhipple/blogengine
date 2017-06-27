@@ -318,6 +318,11 @@ app.get('/blog/:year/:month/', function(req, res) {
     });
 });
 
+
+app.get('/kill-cache', function(req, res) {
+	res.redirect('/404');
+});
+
 //Route handler for static pages
 app.get('/:page', function(req, res) {
     getPageMarkdown(req.params.page, function(err, data) {
@@ -331,6 +336,8 @@ app.get('/:page', function(req, res) {
         }
     })
 });
+
+
 
 //If all else fails! Must be last get handler. A generic 404-er
 app.get('/*', function(req, res) {
