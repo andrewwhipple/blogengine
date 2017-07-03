@@ -158,9 +158,11 @@ function getBlogroll(res, numPosts, searchString) {
 			} 
 		}
 		
+		console.log(blogRollPosts);
+		
 		blogRollPosts = blogRollPosts.map(readFilePromise);
 		
-		console.log(blogRollPosts);
+		
 		
 		Promise.all(blogRollPosts).then(function(posts) {
 			
