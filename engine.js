@@ -145,7 +145,8 @@ function getBlogroll(res, numPosts, searchString) {
 		
 		var blogRollPosts = [];
 
-    
+    	console.log(blogRollPosts);
+	
 		searchString = searchString || "";
 		numPosts = numPosts || postList.posts.length;
 
