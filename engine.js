@@ -149,17 +149,22 @@ function getBlogroll(res, numPosts, searchString) {
 		searchString = searchString || "";
 		numPosts = numPosts || postList.posts.length;
 
+		console.log(numPosts + " / " + searchString);
+		
 		for (var i = 0; i < numPosts; i++) {
 			if (i < postList.posts.length && postList.posts[i].toString().indexOf(searchString) !== -1) {
-				console.log(postList[i]);
+				console.log(postList.posts[i]);
 				blogRollPosts[i] = globalVars.appConfig.filePath + '/blog/' + postList.posts[i];
 			} 
 		}
 		
 		blogRollPosts = blogRollPosts.map(readFilePromise);
-
+		
+		console.log(blogRollPosts);
+		
 		Promise.all(blogRollPosts).then(function(posts) {
-					
+			
+			console.log(posts);
 			for (var j = 0; j < posts.length; j++) {
 				blogRollHTML += getHTMLFromMarkdown(posts[j].toString(), true).html;
 				blogRollHTML += "<br>";
