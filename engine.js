@@ -143,7 +143,7 @@ function getBlogroll(res, numPosts, searchString) {
 		postList.posts.reverse();
 		var blogRollHTML = "";
 		
-		blogRollPosts = [];
+		var blogRollPosts = [];
 
     
 		searchString = searchString || "";
