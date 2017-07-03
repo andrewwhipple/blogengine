@@ -130,8 +130,9 @@ function configDataIsExpired() {
 }
 
 //Function to create a blogroll of posts. Takes a response object from an app.get call, as well as the number of posts to render in the blogroll. Returns nothing, but sends the eventual response to the client.
-function getBlogroll(res, numPosts) {
-    fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
+function getBlogroll(res, numPosts, searchString) {
+	
+	fs.readFile(globalVars.appConfig.filePath + '/blog/postList.json', function(err, content) {
         if (err) {
 			console.log(err);
 			return;
@@ -144,12 +145,14 @@ function getBlogroll(res, numPosts) {
 		
 		blogRollPosts = [];
 
+    
+		searchString = searchString || "";
+		numPosts = numPosts || postList.posts.length;
+
 		for (var i = 0; i < numPosts; i++) {
-			if (i < postList.posts.length) {
+			if (i < postList.posts.length && postList.posts[i].toString().indexOf(searchString) !== -1) {
 				blogRollPosts[i] = globalVars.appConfig.filePath + '/blog/' + postList.posts[i];
-			} else {
-				break;
-			}
+			} 
 		}
 		
 		blogRollPosts = blogRollPosts.map(readFilePromise);
@@ -261,14 +264,14 @@ app.get('/', function(req, res) {
         loadConfigs();
     }    
    
-   	getBlogroll(res, 5);
+   	getBlogroll(res, 5, null);
    
 });
 
 //Route handler for the full, infinite scroll blogroll.
 app.get('/blogroll', function(req, res) {
     
-	getBlogroll(res, 100);
+	getBlogroll(res, null, null);
 	
 });
 
