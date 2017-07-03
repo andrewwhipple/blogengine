@@ -297,27 +297,7 @@ app.get('/blog/:year/:month/', function(req, res) {
         } 
         var dateString = req.params.year + "/" + req.params.month + "/";
          
-        var postList = JSON.parse(content);
-        //Ordering is by date, most recent first, and reverse alphabetical if multiple on one day.
-        postList.posts.sort();
-        postList.posts.reverse();
-        var blogRollHTML = "";
-        var blogRollPosts = [];
-        for (var i = 0; i < postList.posts.length; i++) {
-            if (postList.posts[i].toString().indexOf(dateString) !== -1) {
-                blogRollPosts.push(fs.readFileSync(globalVars.appConfig.filePath + '/blog/' + postList.posts[i]));
-            }
-        }
-        
-        //NEED TO FIGURE OUT HOW TO GET THE TITLE, LINKS, METADATA INTO THE BLOGROLL HTML.
-        for (var j = 0; j < blogRollPosts.length; j++) {
-            if (blogRollPosts[j]) {      
-                blogRollHTML += getHTMLFromMarkdown(blogRollPosts[j].toString(), true).html;
-                blogRollHTML += "<br>";
-            }
-        }
-		res.set('Cache-Control', 'public, max-age=' + globalVars.appConfig.cacheMaxAge);
-        res.render('index', {body: blogRollHTML, title: globalVars.siteConfig.defaultTitle});
+        getBlogroll(res, null, dateString);
     });
 });
 
