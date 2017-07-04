@@ -19,3 +19,5 @@ sudo apt-get install -y build-essential
 cd ~
 
 wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+
+
