@@ -113,3 +113,8 @@ a.am-header-title-no-highlight {
 .am-footer {
     padding-top: 2%;
 }
+
+
+hr {
+    border-top: 1px solid #7437F4;
+}
