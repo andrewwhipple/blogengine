@@ -1,18 +1,23 @@
 a, a:visited, a:active {
-    color: #36ABD9;
+    color: #7437F4;
 }
 
 a:hover {
-    color: #023859;
+    color: #07008B;
 }
 
 body {
-    background-color: #F2F2F2;
+    background-color: #F4BFF4;
     text-size-adjust: auto;
+    font-family: 'Archivo Narrow', sans-serif;
 }
 
 p, li {
     font-size: 1.2em;
+}
+
+.am-post-title, .am-header-title, .am-navbar, .am-linkpost-title, h1, h2, h3, h4, h5 {
+    font-family: 'VT323', monospace;
 }
 
 img {
@@ -27,7 +32,7 @@ img {
 }
 
 .am-header {
-    background-color: #023859;
+    background-color: #7437F4;
     margin-left: auto;
     margin-right: auto;
 }
@@ -55,19 +60,19 @@ img {
     max-width: 55em;
     margin-left: auto;
     margin-right: auto;
-    color: #F2F2F2;
+    color: #85F6F2;
 }
 
 .am-header-content a:hover {
-    color: #F2F2F2;
+    color: #85F6F2;
 }
 
 .am-navbar a {
-    color: #F2F2F2;
+    color: #85F6F2;
 }
 
 a.am-header-title-no-highlight {
-    color: #F2F2F2;
+    color: #85F6F2;
 }
 
 .am-body {
@@ -78,19 +83,20 @@ a.am-header-title-no-highlight {
 
 .am-post-title a {
     text-decoration: none;
-    color: #023859;
+    color: #7437F4;
+
 }
 
 .am-post-title a:hover, .am-post-title a:visited {
-    color: #023859;
+    color: #7437F4;
 }
 
 .am-linkpost-pub-date, .am-post-pub-date {
-    color: gray;
+    color: #85F6F2;
 }
 
 .am-post, .am-linkpost, .am-page {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #7437F4;
     padding-bottom: 2%;
     padding-left: 3%;
     padding-right: 3%;
@@ -107,8 +113,3 @@ a.am-header-title-no-highlight {
 .am-footer {
     padding-top: 2%;
 }
-
-
-
-
-

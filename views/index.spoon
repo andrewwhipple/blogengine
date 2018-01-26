@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="/css/theme.css" rel="stylesheet" type="text/css" />
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow|VT323" rel="stylesheet">
         <script src="/scripts/jquery-1.12.2.min.js"></script>
         <script src="/scripts/bootstrap.min.js"></script>
         <title>{{title}}</title>
@@ -69,8 +70,6 @@
         
         
     </body>
-
-
 
 
 </html>
