@@ -5,6 +5,7 @@ var fs = require('fs');
 var marked = require('marked');
 var favicon = require('serve-favicon');
 var http = require('http');
+var helmet = require('helmet');
 var Promise = require('es6-promise').Promise;
 
 Promise.polyfill();
@@ -122,6 +123,10 @@ app.use(express.static(globalVars.appConfig.filePath + '/static'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
+
+app.use(helmet({
+	noCache: false
+}));
 
 
 //Helper function to see if the TTL for the config data has expired

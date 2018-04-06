@@ -5,10 +5,12 @@
   "main": "engine.js",
   "author": "Andrew Whipple",
   "dependencies": {
+    "es6-promise": "*",
     "express": "^4.13.4",
-    "marked": "^0.3.5",
-    "serve-favicon": "^2.3.0",
+    "helmet": "^3.12.0",
     "http": "*",
-    "es6-promise": "*"
+    "marked": "^0.3.5",
+    "npm": "^5.8.0",
+    "serve-favicon": "^2.3.0"
   }
 }
