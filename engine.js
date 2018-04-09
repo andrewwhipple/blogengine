@@ -285,7 +285,7 @@ app.get('/blogroll', function(req, res) {
 });
 
 
-function getPostContent(path) {
+function getPostContent(path, callback) {
 	var result = {
 		"blogPostTitle": "",
 		"blogPostDate": "",
@@ -325,11 +325,11 @@ function getPostContent(path) {
 		}
 		result.blogPostContentHTML = contentHTML;
 		
-		return result;
+		callback(result);
 		
 	}).catch(function(err) {
 		console.log(err);
-		return null;
+		callback(null, err);
 	});
 	
 }
@@ -341,35 +341,28 @@ function getPostContent(path) {
 app.get('/blog/:year/:month/:day/:post/', function(req, res) {
     var path = "/blog/" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/" + req.params.post;
     
-	var postContent = getPostContent(path);
+	getPostContent(path, function(postContent, err) {
+		if (err) {
+			res.redirect('/404');
+		} else {
+			var pageContent = {
+				"title": postContent.blogPostTitle,
+				"headerDescription": siteConfig.description,
+				"navbar": siteConfig.navbar,
+				"posts": [{
+					"title": postContent.blogPostTitle,
+					"date": postContent.blogPostDate,
+					"link": postContent.blogPostLink,
+					"content": postContent.blogPostContentHTML,
+					"permalink": postContent.blogPostPermalink,
+					"linkPost": postContent.blogPostIsLinkPost
+				}]
+			}
 	
-	console.log("\n --- \n");
-	
-	console.log(postContent);
-
-	
-	
-	if (!postContent) {
-		res.redirect('/404');
-		return;
-	}
-	
-	var pageContent = {
-		"title": postContent.blogPostTitle,
-		"headerDescription": siteConfig.description,
-		"navbar": siteConfig.navbar,
-		"posts": [{
-			"title": postContent.blogPostTitle,
-			"date": postContent.blogPostDate,
-			"link": postContent.blogPostLink,
-			"content": postContent.blogPostContentHTML,
-			"permalink": postContent.blogPostPermalink,
-			"linkPost": postContent.blogPostIsLinkPost
-		}]
-	}
-	
-	res.render('index', pageContent);
-	
+			res.render('index', pageContent);
+		}
+	});
+		
 });
 
 
