@@ -345,6 +345,7 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
 		if (err) {
 			res.redirect('/404');
 		} else {
+			var now = new Date();
 			var pageContent = {
 				"title": postContent.blogPostTitle,
 				"headerDescription": globalVars.siteConfig.description,
