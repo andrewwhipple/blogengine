@@ -300,11 +300,19 @@ function getPostContent(path) {
 		
 		var fileString = file.toString();
 		
+		console.log(fileString);
+		
 		var metadata = parseMetaData(fileString);
+		
+		console.log(metadata);
 		
 		var markdown = fileString.replace(/@@:.*:@@/, "");
 		
+		console.log(markdown);
+		
 		var contentHTML = marked(markdown);
+		
+		console.log(contentHTML);
 		
 		result.blogPostTitle = metadata.Title;
 		result.blogPostDate = metadata.Date;
