@@ -329,7 +329,7 @@ function getPostContent(path) {
 
 //Route handler for individual blog post permalinks
 app.get('/blog/:year/:month/:day/:post/', function(req, res) {
-    var path = "" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/" + req.params.post;
+    var path = "/blog/" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/" + req.params.post;
     
 	var postContent = getPostContent(path);
 	
