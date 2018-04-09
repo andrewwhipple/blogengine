@@ -343,6 +343,12 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
     
 	var postContent = getPostContent(path);
 	
+	console.log("\n --- \n");
+	
+	console.log(postContent);
+
+	
+	
 	if (!postContent) {
 		res.redirect('/404');
 		return;
