@@ -22,7 +22,7 @@
                 <div class="am-header-content">
                     
                     <h1 class="am-header-title"><a class="am-header-title-no-highlight" href="/">Andrew Whipple</a></h1>
-                    <p class="am-header-description">{{description}}</p>
+                    <p class="am-header-description">{{headerDescription}}</p>
             
             
                     <div class="am-navbar">
@@ -32,7 +32,31 @@
             </div>
             <div>
                 <div class="am-body-content">
-                    {{body}}
+                    {{#each post}}
+						{{#if linkPost}}
+						
+						<div class="am-linkpost"> 
+						    <h1 class="am-linkpost-title"><a href="{{link}}">{{title}} 🔗</a></h1>
+						    <span>
+						        <p class="am-linkpost-pub-date"><em>Published {{date}}</em> <a href="{{permalink}}" class="am-linkpost-permalink">(Permalink 📌)</a></p>
+						    </span>
+						    <div class="am-linkpost-content">
+						        {{content}}
+						    </div>
+						</div>
+						
+						{{else}}
+						
+						<div class="am-post"> 
+						    <h1 class="am-post-title"><a href="{{link}}">{{title}}</a></h1>
+						    <p class="am-post-pub-date"><em>Published {{date}}</em></p>
+						    <div class="am-post-content">
+						        {{content}}
+						    </div>
+						</div>
+						
+						{{/if}}
+					{{/each}}
             
                 </div>
                 
