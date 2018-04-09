@@ -335,7 +335,7 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
 	
 	if (!postContent) {
 		res.redirect('/404');
-		break;
+		return;
 	}
 	
 	var pageContent = {
