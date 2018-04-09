@@ -295,7 +295,7 @@ function getPostContent(path) {
 		"blogPostContentHTML": ""
 	}
 		
-	var readFile = readFilePromise(path + ".md");
+	var readFile = readFilePromise(globalVars.appConfig.filePath + path + ".md");
 	readFile.then(function(file) {
 		
 		var metadata = parseMetadata(file);
