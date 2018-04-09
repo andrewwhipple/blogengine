@@ -347,8 +347,8 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
 		} else {
 			var pageContent = {
 				"title": postContent.blogPostTitle,
-				"headerDescription": siteConfig.description,
-				"navbar": siteConfig.navbar,
+				"headerDescription": globalVars.siteConfig.description,
+				"navbar": globalVars.siteConfig.navbar,
 				"posts": [{
 					"title": postContent.blogPostTitle,
 					"date": postContent.blogPostDate,
