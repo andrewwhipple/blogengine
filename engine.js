@@ -119,7 +119,7 @@ function loadConfigs() {
 }
 
 loadConfigs();
-loadTemplates();
+//loadTemplates();
 
 //Handle the static files
 app.use(express.static(globalVars.appConfig.filePath + '/static'));
