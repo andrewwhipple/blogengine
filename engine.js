@@ -349,7 +349,7 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
 				"title": postContent.blogPostTitle,
 				"headerDescription": globalVars.siteConfig.description,
 				"navbar": globalVars.siteConfig.navbar,
-				"posts": [{
+				"post": [{
 					"title": postContent.blogPostTitle,
 					"date": postContent.blogPostDate,
 					"link": postContent.blogPostLink,

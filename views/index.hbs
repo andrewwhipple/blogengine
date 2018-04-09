@@ -12,7 +12,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow|VT323" rel="stylesheet">
         <script src="/scripts/jquery-1.12.2.min.js"></script>
         <script src="/scripts/bootstrap.min.js"></script>
-        <title>{{title}}</title>
+        <title>{{{title}}}</title>
     </head>
 
     <body>
@@ -22,11 +22,11 @@
                 <div class="am-header-content">
                     
                     <h1 class="am-header-title"><a class="am-header-title-no-highlight" href="/">Andrew Whipple</a></h1>
-                    <p class="am-header-description">{{headerDescription}}</p>
+                    <p class="am-header-description">{{{headerDescription}}}</p>
             
             
                     <div class="am-navbar">
-                        <h4>{{navbar}}</h4>
+                        <h4>{{{navbar}}}</h4>
                     </div>
                 </div>
             </div>
@@ -36,22 +36,22 @@
 						{{#if linkPost}}
 						
 						<div class="am-linkpost"> 
-						    <h1 class="am-linkpost-title"><a href="{{link}}">{{title}} 🔗</a></h1>
+						    <h1 class="am-linkpost-title"><a href="{{link}}">{{{title}}} 🔗</a></h1>
 						    <span>
-						        <p class="am-linkpost-pub-date"><em>Published {{date}}</em> <a href="{{permalink}}" class="am-linkpost-permalink">(Permalink 📌)</a></p>
+						        <p class="am-linkpost-pub-date"><em>Published {{{date}}}</em> <a href="{{permalink}}" class="am-linkpost-permalink">(Permalink 📌)</a></p>
 						    </span>
 						    <div class="am-linkpost-content">
-						        {{content}}
+						        {{{content}}}
 						    </div>
 						</div>
 						
 						{{else}}
 						
 						<div class="am-post"> 
-						    <h1 class="am-post-title"><a href="{{link}}">{{title}}</a></h1>
-						    <p class="am-post-pub-date"><em>Published {{date}}</em></p>
+						    <h1 class="am-post-title"><a href="{{link}}">{{{title}}}</a></h1>
+						    <p class="am-post-pub-date"><em>Published {{{date}}}</em></p>
 						    <div class="am-post-content">
-						        {{content}}
+						        {{{content}}}
 						    </div>
 						</div>
 						
@@ -75,7 +75,7 @@
                             (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
                     </div>
-                    <p class="am-footer-text">© Andrew Whipple {{copyrightYear}}</p>
+                    <p class="am-footer-text">© Andrew Whipple {{{copyrightYear}}}</p>
                 </div>
             </div>
         </div>
