@@ -298,9 +298,11 @@ function getPostContent(path) {
 	var readFile = readFilePromise(globalVars.appConfig.filePath + path + ".md");
 	readFile.then(function(file) {
 		
-		var metadata = parseMetaData(file);
+		var fileString = file.toString();
 		
-		var markdown = file.replace(/@@:.*:@@/, "");
+		var metadata = parseMetaData(fileString);
+		
+		var markdown = fileString.replace(/@@:.*:@@/, "");
 		
 		var contentHTML = marked(markdown);
 		
