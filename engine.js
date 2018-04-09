@@ -356,7 +356,8 @@ app.get('/blog/:year/:month/:day/:post/', function(req, res) {
 					"content": postContent.blogPostContentHTML,
 					"permalink": postContent.blogPostPermalink,
 					"linkPost": postContent.blogPostIsLinkPost
-				}]
+				}], 
+				"copyrightYear": now.getFullYear();
 			}
 	
 			res.render('index', pageContent);
