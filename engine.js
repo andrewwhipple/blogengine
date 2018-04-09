@@ -47,8 +47,11 @@ var globalVars = {
 //Favicon loading
 app.use(favicon(__dirname + '/favicon.ico'));
 
+
+
+
 //The meow templating engine. It's silly. It's unnecessary. But eh, why not?
-app.engine('spoon', function(filePath, options, callback) {
+/*app.engine('spoon', function(filePath, options, callback) {
     fs.readFile(filePath, function(err, content) {
         if (err) {
             return callback(new Error(err));
@@ -59,11 +62,11 @@ app.engine('spoon', function(filePath, options, callback) {
         
         return callback(null, rendered);
     });
-});
+}); */
 
 //Setting the views directory and the view engine
 app.set('views', './views');
-app.set('view engine', 'spoon');
+app.set('view engine', 'hbs');
 
 //Load the post templates into memory.
 function loadTemplates() {
@@ -281,19 +284,81 @@ app.get('/blogroll', function(req, res) {
 	
 });
 
+
+function getPostContent(path) {
+	var result = {
+		"blogPostTitle": "",
+		"blogPostDate": "",
+		"blogPostLink": "",
+		"blogPostPermalink": "",
+		"blogPostIsLinkPost": false,
+		"blogPostContentHTML": ""
+	}
+		
+	var readFile = readFilePromise(path + ".md");
+	readFile.then(function(file) {
+		
+		var metadata = parseMetadata(file);
+		
+		var markdown = file.replace(/@@:.*:@@/, "");
+		
+		var contentHTML = marked(markdown);
+		
+		result.blogPostTitle = metadata.Title;
+		result.blogPostDate = metadata.Date;
+		result.blogPostLink = metadata.Link;
+		result.blogPostIsLinkPost = metadata.LinkPost;
+		if (result.blogPostIsLinkPost) {
+			result.blogPostPermalink = metadata.Permalink;
+		} else {
+			result.blogPostPermalink = null;
+		}
+		result.blogPostContentHTML = contentHTML;
+		
+		return result;
+		
+	}).catch(function(err) {
+		console.log(err);
+		return null;
+	});
+	
+}
+
+
+
+
 //Route handler for individual blog post permalinks
 app.get('/blog/:year/:month/:day/:post/', function(req, res) {
-    var path = "" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/";
-    getBlogMarkdown(req.params.post, path, function(err, data) {
-        if (err) {
-            res.redirect('/404');
-        } else {
-            var postBody = getHTMLFromMarkdown(data, true);   
-			res.set('Cache-Control', 'public, max-age=' + globalVars.appConfig.cacheMaxAge);        
-            res.render('index', {title: postBody.title, body: postBody.html});
-        }
-    }); 
+    var path = "" + req.params.year + "/" + req.params.month + "/" + req.params.day + "/" + req.params.post;
+    
+	var postContent = getPostContent(path);
+	
+	if (!postContent) {
+		res.redirect('/404');
+		break;
+	}
+	
+	var pageContent = {
+		"title": postContent.blogPostTitle,
+		"headerDescription": siteConfig.description,
+		"navbar": siteConfig.navbar,
+		"posts": [{
+			"title": postContent.blogPostTitle,
+			"date": postContent.blogPostDate,
+			"link": postContent.blogPostLink,
+			"content": postContent.blogPostContentHTML,
+			"permalink": postContent.blogPostPermalink,
+			"linkPost": postContent.blogPostIsLinkPost
+		}]
+	}
+	
+	res.render('index', pageContent);
+	
 });
+
+
+
+
 
 //Route handler for the monthly archive pages. Basically a modified index blogroll page.
 app.get('/blog/:year/:month/', function(req, res) {
