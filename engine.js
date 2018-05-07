@@ -48,37 +48,9 @@ var globalVars = {
 app.use(favicon(__dirname + '/favicon.ico'));
 
 
-
-
-//The meow templating engine. It's silly. It's unnecessary. But eh, why not?
-/*app.engine('spoon', function(filePath, options, callback) {
-    fs.readFile(filePath, function(err, content) {
-        if (err) {
-            return callback(new Error(err));
-        }
-        var rendered = "";
-        var now = new Date();
-        rendered = content.toString().replace('{{title}}', options.title).replace('{{body}}', options.body).replace("{{meta-description}}", globalVars.siteConfig.metaDescription).replace("{{meta-keywords}}", globalVars.siteConfig.metaKeywords).replace("{{meta-author}}", globalVars.siteConfig.metaAuthor).replace("{{description}}", globalVars.siteConfig.description).replace("{{navbar}}", globalVars.siteConfig.navbar).replace("{{copyrightYear}}", now.getFullYear());
-        
-        return callback(null, rendered);
-    });
-}); */
-
 //Setting the views directory and the view engine
 app.set('views', './views');
 app.set('view engine', 'hbs');
-
-//Load the post templates into memory.
-function loadTemplates() {
-	var templates = ["./views/postTemplate.spoon", "./views/linkPostTemplate.spoon"].map(readFilePromise);
-
-	Promise.all(templates).then(function(files) {
-		globalVars.siteConfig.postTemplate = files[0].toString();
-		globalVars.siteConfig.linkPostTemplate = files[1].toString();
-	}).catch(function(err){
-		console.log(err);
-	});
-}
 
 //Load the configuration files into memory.
 function loadConfigs() {
@@ -119,7 +91,6 @@ function loadConfigs() {
 }
 
 loadConfigs();
-//loadTemplates();
 
 //Handle the static files
 app.use(express.static(globalVars.appConfig.filePath + '/static'));
@@ -213,29 +184,7 @@ function getPageMarkdown(page, callback) {
     });
 };
 
-/*
-Function to process the post, given markdown string from a markdown file, and turn it into correct html
 
-Returns an object with the html of the post body and the title of the post.
-
-*/
-/*function getPostHTML(postData) {
-    var postBodyHTML = globalVars.siteConfig.postTemplate;
-    var metaDataRaw = postData.match(/@@:.*:@@/)[0];     
-    var metaDataClean = metaDataRaw.replace("@@:", "{").replace(":@@", "}");
-    var metaDataParsed = JSON.parse(metaDataClean);
-                
-    if (metaDataParsed.LinkPost) {
-        postBodyHTML = globalVars.siteConfig.linkPostTemplate;
-        postBodyHTML = postBodyHTML.replace("{{permalink}}", metaDataParsed.Permalink);
-    }
-    
-    postBodyHTML = postBodyHTML.replace("{{title}}", metaDataParsed.Title).replace("{{link}}", metaDataParsed.Link).replace("{{date}}", metaDataParsed.Date);
-            
-    postBodyHTML = postBodyHTML.replace("{{content}}", marked(postData.replace(/@@:.*:@@/, "")));
-    
-    return {"html": postBodyHTML, "title": metaDataParsed.Title};
-}*/
 
 function parseMetaData(markdown) {
     var metaDataRaw = markdown.match(/@@:.*:@@/)[0];     
@@ -298,21 +247,10 @@ function getPostContent(path, callback) {
 	var readFile = readFilePromise(globalVars.appConfig.filePath + path + ".md");
 	readFile.then(function(file) {
 		
-		var fileString = file.toString();
-		
-		console.log(fileString);
-		
+		var fileString = file.toString();	
 		var metadata = parseMetaData(fileString);
-		
-		console.log(metadata);
-		
 		var markdown = fileString.replace(/@@:.*:@@/, "");
-		
-		console.log(markdown);
-		
 		var contentHTML = marked(markdown);
-		
-		console.log(contentHTML);
 		
 		result.blogPostTitle = metadata.Title;
 		result.blogPostDate = metadata.Date;
